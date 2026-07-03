@@ -3,11 +3,8 @@ import LoginForm from "../components/login/LoginForm";
 
 const SignIn= () => {
   return (
- <section className="grid min-h-screen lg:grid-cols-2">
-  {/* Left Side */}
+ <section className="grid min-h-screen lg:grid-cols-[40%_60%]">
   <LoginInfo />
-
-  {/* Right Side */}
   <LoginForm />
 </section>
   );

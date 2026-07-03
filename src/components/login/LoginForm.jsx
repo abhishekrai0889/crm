@@ -1,4 +1,6 @@
+import TextInput from "../../ui/TextInput";
 import { useState } from "react";
+import { SiGoogle, SiMicrosoft } from "react-icons/si";
 import { Link } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
 import MicrosoftIcon from "@mui/icons-material/Microsoft";
@@ -6,11 +8,34 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
 const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
+
+  const [formData, setFormData] = useState({
+  email: "",
+  password: "",
+});
+
+const [errors, setErrors] = useState({});
+const [showPassword, setShowPassword] = useState(false);
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+
+  if (errors[name]) {
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  }
+};
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[var(--bg)] px-6 py-10">
-      <div className="w-full max-w-[450px]">
+      <div className="w-full max-w-[600px]">
 
         {/* Mobile Logo */}
 
@@ -38,88 +63,84 @@ const LoginForm = () => {
           </p>
 
           {/* Form */}
+<form className="mt-8 space-y-6">
 
-          <form className="mt-8 space-y-6">
+  {/* Email */}
 
-            {/* Email */}
+  <TextInput
+    label="Email address"
+    name="email"
+    type="email"
+    placeholder="you@company.com"
+    value={formData.email}
+    onChange={handleChange}
+    error={errors.email}
+    required
+  />
 
-            <div>
-              <label className="mb-2 block text-[14px] font-semibold text-[var(--ink-900)]">
-                Email address
-              </label>
+  {/* Password */}
 
-              <input
-                type="email"
-                placeholder="you@company.com"
-                className="h-[54px] w-full rounded-xl border border-[var(--line)] px-4 text-[15px] outline-none transition-all duration-200 focus:border-[var(--blue-600)] focus:ring-4 focus:ring-blue-100"
-              />
-            </div>
+  <div className="relative">
 
-            {/* Password */}
+    <TextInput
+      label="Password"
+      name="password"
+      type={showPassword ? "text" : "password"}
+      placeholder="Your password"
+      value={formData.password}
+      onChange={handleChange}
+      error={errors.password}
+      required
+    />
 
-            <div>
-              <label className="mb-2 block text-[14px] font-semibold text-[var(--ink-900)]">
-                Password
-              </label>
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute right-3 top-[31px] flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-[var(--ink-500)] transition hover:bg-slate-100"
+    >
+      {showPassword ? (
+        <VisibilityOffOutlinedIcon fontSize="small" />
+      ) : (
+        <VisibilityOutlinedIcon fontSize="small" />
+      )}
+    </button>
 
-              <div className="relative">
+  </div>
 
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Your password"
-                  className="h-[54px] w-full rounded-xl border border-[var(--line)] px-4 pr-14 text-[15px] outline-none transition-all duration-200 focus:border-[var(--blue-600)] focus:ring-4 focus:ring-blue-100"
-                />
+  {/* Remember */}
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShowPassword(!showPassword)
-                  }
-                  className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-[var(--ink-500)] transition hover:bg-slate-100"
-                >
-                  {showPassword ? (
-                    <VisibilityOffOutlinedIcon />
-                  ) : (
-                    <VisibilityOutlinedIcon />
-                  )}
-                </button>
+  <div className="flex items-center justify-between">
 
-              </div>
-            </div>
+    <label className="flex cursor-pointer items-center gap-2 text-[14px] text-[var(--ink-700)]">
 
-            {/* Remember */}
+      <input
+        type="checkbox"
+        className="h-4 w-4 accent-[var(--blue-600)]"
+      />
 
-            <div className="flex items-center justify-between">
+      Remember me
 
-              <label className="flex cursor-pointer items-center gap-2 text-[14px] text-[var(--ink-700)]">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 accent-[var(--blue-600)]"
-                />
+    </label>
 
-                Remember me
-              </label>
+    <Link
+      to="/forgot-password"
+      className="text-[14px] font-semibold text-[var(--blue-600)] hover:underline"
+    >
+      Forgot password?
+    </Link>
 
-              <Link
-                to="/forgot-password"
-                className="text-[14px] font-semibold text-[var(--blue-600)] hover:underline"
-              >
-                Forgot password?
-              </Link>
+  </div>
 
-            </div>
+  {/* Submit */}
 
-            {/* Submit */}
+  <button
+    type="submit"
+    className="flex h-[56px] w-full cursor-pointer items-center justify-center rounded-xl bg-[var(--blue-600)] text-[16px] font-semibold text-white transition-all duration-300 hover:bg-[var(--blue-700)]"
+  >
+    Sign in
+  </button>
 
-            <button
-              type="submit"
-              className="flex h-[56px] w-full cursor-pointer items-center justify-center rounded-xl bg-[var(--blue-600)] text-[16px] font-semibold text-white transition-all duration-300 hover:bg-[var(--blue-700)]"
-            >
-              Sign in
-            </button>
-
-          </form>
-
+</form>
           {/* Divider */}
 
           <div className="my-8 flex items-center gap-4">
@@ -136,21 +157,27 @@ const LoginForm = () => {
 
           <div className="space-y-3">
 
-            <button
-              className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] text-[15px] font-semibold text-[var(--ink-700)] transition hover:border-[var(--blue-400)] hover:bg-slate-50"
-            >
-              <GoogleIcon sx={{ color: "#EA4335" }} />
+           <button
+  className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] bg-white text-[15px] font-semibold text-[var(--ink-700)] transition-all duration-300 hover:border-[var(--blue-400)] hover:bg-slate-50"
+>
+  <SiGoogle
+    size={20}
+    className="text-[#4285F4]"
+  />
 
-              Continue with Google
-            </button>
+  Continue with Google
+</button>
 
-            <button
-              className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] text-[15px] font-semibold text-[var(--ink-700)] transition hover:border-[var(--blue-400)] hover:bg-slate-50"
-            >
-              <MicrosoftIcon sx={{ color: "#0078D4" }} />
+         <button
+  className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] bg-white text-[15px] font-semibold text-[var(--ink-700)] transition-all duration-300 hover:border-[var(--blue-400)] hover:bg-slate-50"
+>
+  <SiMicrosoft
+    size={20}
+    className="text-[#00A4EF]"
+  />
 
-              Continue with Microsoft
-            </button>
+  Continue with Microsoft
+</button>
 
           </div>
 
