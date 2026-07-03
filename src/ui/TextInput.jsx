@@ -180,13 +180,21 @@ const TextInput = ({
       <div className="relative">
         {/* Left Icon */}
         {Icon && iconPosition === "left" && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <Icon
-              className={`w-5 h-5 ${displayError ? "text-red-400" : success ? "text-emerald-400" : "text-slate-400"}`}
+              sx={{
+                fontSize: 18,
+              }}
+              className={
+                displayError
+                  ? "text-red-400"
+                  : success
+                    ? "text-emerald-400"
+                    : "text-slate-400"
+              }
             />
           </div>
         )}
-
         {/* Input */}
         <input
           ref={inputRef}
@@ -206,9 +214,18 @@ const TextInput = ({
 
         {/* Right Icon */}
         {Icon && iconPosition === "right" && (
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
             <Icon
-              className={`w-5 h-5 ${displayError ? "text-red-400" : success ? "text-emerald-400" : "text-slate-400"}`}
+              sx={{
+                fontSize: 18, 
+              }}
+              className={
+                displayError
+                  ? "text-red-400"
+                  : success
+                    ? "text-emerald-400"
+                    : "text-slate-400"
+              }
             />
           </div>
         )}

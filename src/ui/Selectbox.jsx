@@ -123,15 +123,16 @@ const Selectbox = ({
       <div className="relative">
         {/* Left Icon */}
         {Icon && iconPosition === "left" && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+          <div className="absolute inset-y-0 left-0 flex w-11 items-center justify-center pointer-events-none z-10">
             <Icon
-              className={`w-5 h-5 ${
+              sx={{ fontSize: 18 }}
+              className={
                 displayError
                   ? "text-red-400"
                   : success
                     ? "text-emerald-400"
                     : "text-slate-400"
-              }`}
+              }
             />
           </div>
         )}
@@ -186,6 +187,7 @@ const Selectbox = ({
         {Icon && iconPosition === "right" && (
           <div className="absolute inset-y-0 right-8 pr-3 flex items-center pointer-events-none z-10">
             <Icon
+              sx={{ fontSize: 18 }}
               className={`w-5 h-5 ${
                 displayError
                   ? "text-red-400"

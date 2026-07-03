@@ -157,6 +157,7 @@ const Textarea = ({
         {Icon && iconPosition === "left" && (
           <div className="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
             <Icon
+             sx={{ fontSize: 18 }}
               className={`w-5 h-5 ${
                 displayError
                   ? "text-red-400"
@@ -189,6 +190,7 @@ const Textarea = ({
         {Icon && iconPosition === "right" && (
           <div className="absolute top-3 right-0 pr-3 flex items-start pointer-events-none">
             <Icon
+             sx={{ fontSize: 18 }}
               className={`w-5 h-5 ${
                 displayError
                   ? "text-red-400"

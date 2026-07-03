@@ -3,10 +3,13 @@ import "./App.css";
 
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
-
+import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Pricing from "./pages/Pricing";
 import SignIn from "./pages/SignIn";
+import Trial from "./pages/Trial"; 
+import Contact from "./pages/Contact";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   const location = useLocation();
@@ -27,6 +30,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/signin" element={<SignIn />} />
+         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Trial />} />
+         <Route path="/forgot-password" element={<ForgotPassword />} />
+         <Route path="/contact" element={<Contact />} />
+    
       </Routes>
 
       {!hideLayout && <Footer />}
