@@ -1,16 +1,18 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 
 import PrimaryButton from "../common/PrimaryButton";
 
 const plans = [
   {
     name: "Starter",
-    color: "bg-slate-400",
+    color: "bg-[var(--ink-300)]",
     price: 12,
     monthly: 15,
     tagline: "For small teams getting off spreadsheets.",
+    featured: false,
+    custom: false,
     button: "secondary",
     features: [
       "Contacts, companies, leads & deals",
@@ -18,7 +20,7 @@ const plans = [
       "Unlimited contacts",
       "Two-way Gmail & Outlook sync",
       "Web forms & lead capture",
-      "AI Copilot — 500 actions / month",
+      "AI copilot — 500 actions / month",
       "Custom reports included",
       "Email support",
     ],
@@ -27,191 +29,223 @@ const plans = [
   {
     name: "Growth",
     color: "bg-amber-500",
-    featured: true,
     price: 28,
     monthly: 35,
     tagline: "For growing sales teams that need automation.",
+    featured: true,
+    custom: false,
     button: "primary",
     features: [
-      "Everything in Starter",
+      "Everything in Starter, plus",
       "Multiple pipelines",
       "Email sequences & meeting scheduler",
       "Marketing module (light)",
       "Workflow automation builder",
       "Telephony bundle — 250 min",
-      "Unlimited AI Copilot",
+      "AI copilot — unlimited basic actions",
       "Priority email support",
     ],
   },
 
   {
     name: "Pro",
-    color: "bg-blue-600",
+    color: "bg-[var(--blue-600)]",
     price: 52,
     monthly: 65,
     tagline: "For companies running the full customer lifecycle.",
+    featured: false,
+    custom: false,
     button: "secondary",
     features: [
-      "Everything in Growth",
+      "Everything in Growth, plus",
       "Marketing automation (full)",
-      "Support module with SLAs",
-      "Projects module",
-      "Custom objects",
-      "Advanced reports",
-      "AI Agents",
+      "Support module with SLAs & live chat",
+      "Projects module with templates",
+      "Custom objects & advanced reports",
+      "AI Agents — Customer & Prospecting",
+      "Quotes, products & e-signature",
       "Live chat support",
     ],
   },
 
   {
     name: "Enterprise",
-    color: "bg-slate-900",
+    color: "bg-[var(--ink-900)]",
+    featured: false,
     custom: true,
+    button: "secondary",
     tagline:
       "Custom plan for security-conscious, larger organizations.",
-    button: "secondary",
     features: [
-      "Everything in Pro",
-      "SAML & SCIM",
-      "Dedicated database",
-      "Encryption",
-      "White-label",
-      "Sandbox",
+      "Everything in Pro, plus",
+      "SAML & SCIM provisioning",
+      "Dedicated database option",
+      "Bring-your-own-key encryption",
+      "White-label & custom domain",
+      "Sandbox environment",
       "99.95% uptime SLA",
-      "Customer Success Manager",
+      "Named customer success manager",
     ],
   },
 ];
 
 const PricingPlans = () => {
   return (
-    <section className="py-20">
+    <section className="pt-16 pb-24">
       <div className="mx-auto max-w-[1180px] px-6">
+<div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+  {plans.map((plan, index) => (
+    <motion.div
+      key={plan.name}
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.5,
+        delay: index * 0.1,
+      }}
+     className={`relative flex h-full flex-col rounded-[20px] border bg-white px-[26px] py-[30px]
+transition-all duration-300 ease-in-out
+hover:-translate-y-2
+hover:border-[var(--blue-600)]
+hover:shadow-[0_24px_60px_-12px_rgba(16,57,154,.20)]
+${
+  plan.featured
+    ? "border-[var(--blue-600)] shadow-[0_24px_60px_-12px_rgba(16,57,154,.25)]"
+    : "border-[var(--line)]"
+}`}
+    >
+      {plan.featured && (
+        <span className="absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[var(--blue-600)] px-[14px] py-[5px] text-[12px] font-bold text-white">
+          Most Popular
+        </span>
+      )}
 
-        <div className="grid gap-8 lg:grid-cols-4 md:grid-cols-2">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.1,
-              }}
-              viewport={{ once: true }}
-              className={`relative rounded-3xl border bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl ${
-                plan.featured
-                  ? "border-blue-600 ring-2 ring-blue-600"
-                  : "border-slate-200"
-              }`}
-            >
-              {plan.featured && (
-                <span className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white">
-                  Most Popular
-                </span>
-              )}
+      {/* Tier */}
 
-              <div className="flex items-center gap-3">
-                <span
-                  className={`h-4 w-4 rounded-full ${plan.color}`}
-                ></span>
+      <div className="flex items-center gap-2">
+        <span
+          className={`h-3 w-3 rotate-45 rounded-[2px] ${plan.color}`}
+        />
 
-                <h3 className="text-xl font-bold text-slate-900">
-                  {plan.name}
-                </h3>
-              </div>
+        <h3 className="text-[17px] font-bold text-[var(--ink-900)]">
+          {plan.name}
+        </h3>
+      </div>
 
-              <p className="mt-4 text-sm leading-7 text-slate-500">
-                {plan.tagline}
-              </p>
+      {/* Tagline */}
 
-              {plan.custom ? (
-                <>
-                  <h2 className="mt-8 text-5xl font-bold">
-                    Custom
-                  </h2>
+      <p className="mt-2 min-h-[52px] text-[14px] leading-7 text-[var(--ink-500)]">
+        {plan.tagline}
+      </p>
 
-                  <p className="mt-2 text-sm text-slate-500">
-                    Tailored to your business
-                  </p>
-                </>
-              ) : (
-                <>
-                  <div className="mt-8 flex items-end">
-                    <span className="text-2xl font-semibold">$</span>
+      {/* Price */}
 
-                    <span className="ml-1 text-6xl font-bold">
-                      {plan.price}
-                    </span>
-                  </div>
+      {plan.custom ? (
+        <div className="mt-4">
+          <h2 className="text-[44px] font-extrabold leading-none">
+            Custom
+          </h2>
 
-                  <p className="mt-2 text-sm text-slate-500">
-                    per user / month
-                  </p>
-                </>
-              )}
-
-              <div className="mt-8">
-                {plan.custom ? (
-                  <Link
-                    to="/contact"
-                    className="block rounded-xl border border-slate-300 py-4 text-center font-semibold transition hover:border-blue-600 hover:text-blue-600"
-                  >
-                    Contact Sales
-                  </Link>
-                ) : plan.button === "primary" ? (
-                  <PrimaryButton to="/signup">
-                    Start Free Trial
-                  </PrimaryButton>
-                ) : (
-                  <Link
-                    to="/signup"
-                    className="block rounded-xl border border-slate-300 py-4 text-center font-semibold transition hover:border-blue-600 hover:text-blue-600"
-                  >
-                    Start Free Trial
-                  </Link>
-                )}
-
-                <ul className="mt-8 space-y-4">                {plan.features.map((feature, i) => (
-                    <li
-                      key={i}
-                      className="flex items-start gap-3 text-[15px] leading-7 text-slate-700"
-                    >
-                      <CheckCircleRoundedIcon
-                        sx={{
-                          fontSize: 20,
-                          color: "#2563eb",
-                          marginTop: "4px",
-                        }}
-                      />
-
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          ))}
+          <p className="mt-3 min-h-[48px] text-[14px] leading-6 text-[var(--ink-500)]">
+            tailored to your team & compliance needs
+          </p>
         </div>
+      ) : (
+        <div className="mt-4">
+          <div className="flex items-start">
+            <span className="mt-2 text-[22px] font-bold">$</span>
 
-        {/* Bottom Text */}
+            <span className="ml-1 text-[52px] font-extrabold leading-none tracking-[-0.04em]">
+              {plan.price}
+            </span>
+          </div>
+
+          <p className="mt-3 min-h-[48px] text-[14px] leading-6 text-[var(--ink-500)]">
+            per user / month, billed annually
+          </p>
+        </div>
+      )}
+
+      {/* Button */}
+
+      <div className="mt-4">
+        {plan.custom ? (
+          <Link
+            to="/contact"
+            className="block w-full rounded-[8px] border border-[var(--line)] py-[13px] text-center text-[15px] font-semibold text-[var(--ink-900)] transition-all duration-200 hover:border-[var(--blue-400)] hover:text-[var(--blue-600)]"
+          >
+            Contact Sales
+          </Link>
+        ) : plan.button === "primary" ? (
+          <PrimaryButton
+            to="/signup"
+            className="w-full justify-center"
+          >
+            Start Free Trial
+          </PrimaryButton>
+        ) : (
+          <Link
+            to="/signup"
+            className="block w-full rounded-[8px] border border-[var(--line)] py-[13px] text-center text-[15px] font-semibold text-[var(--ink-900)] transition-all duration-200 hover:border-[var(--blue-400)] hover:text-[var(--blue-600)]"
+          >
+            Start Free Trial
+          </Link>
+        )}
+      </div>
+
+      {/* Features */}
+
+      <ul className="mt-7 flex-1 space-y-[14px]">
+        {plan.features.map((feature, i) => (
+          <li
+            key={i}
+            className="flex items-start gap-[10px] text-[14px] leading-7 text-[var(--ink-700)]"
+          >
+            <CheckRoundedIcon
+              sx={{
+                fontSize: 18,
+                color: "var(--blue-600)",
+                marginTop: "3px",
+                flexShrink: 0,
+              }}
+            />
+
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  ))}
+</div>
 
         <motion.p
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="mx-auto mt-16 max-w-3xl text-center text-sm leading-7 text-slate-500"
+          initial={{
+            opacity: 0,
+            y: 25,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+          }}
+          transition={{
+            duration: .5,
+          }}
+          className="mx-auto mt-16 max-w-3xl text-center text-[15px] text-[var(--ink-500)]"
         >
           All plans start with a{" "}
-          <span className="font-semibold text-slate-900">
+          <span className="font-semibold text-[var(--ink-900)]">
             14-day free trial
           </span>{" "}
           — full feature access, no credit card required.
         </motion.p>
+
       </div>
     </section>
   );
 };
 
-export default PricingPlans;                
+export default PricingPlans;

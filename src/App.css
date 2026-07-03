@@ -1,3 +1,43 @@
+:root {
+  /* Brand — Engenia blue */
+  --blue-900: #0B2A6B;
+  --blue-800: #10399A;
+  --blue-700: #1240B4;
+  --blue-600: #1A56DB;   /* primary */
+  --blue-500: #2E6BEF;
+  --blue-400: #5B8DF5;
+  --blue-100: #DBE7FE;
+  --blue-50:  #EEF4FF;
+
+  /* Neutrals */
+  --ink-900: #0F1D3A;
+  --ink-700: #2B3A57;
+  --ink-500: #5A6B87;
+  --ink-300: #9AA8BF;
+  --line:    #E4E9F2;
+  --bg:      #F7F9FC;
+  --white:   #FFFFFF;
+
+  /* Semantic */
+  --green-600: #067A57;
+  --green-50:  #E6F7F1;
+  --amber-600: #B45309;
+  --amber-50:  #FEF3E2;
+  --red-600:   #D92D20;
+  --red-50:    #FEECEA;
+
+  /* Type */
+  --font: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+
+ 
+  
+}
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4 { line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
+.display { font-size: clamp(2.4rem, 5vw, 3.75rem); }
+.h2 { font-size: clamp(1.8rem, 3.4vw, 2.5rem); }
+.h3 { font-size: 1.35rem; }
 .counter {
   font-size: 16px;
   padding: 5px 10px;

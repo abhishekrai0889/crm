@@ -9,29 +9,28 @@ const PrimaryButton = ({
   onClick,
 }) => {
   const variants = {
-    primary:
-      "bg-blue-600 text-white border border-blue-600 hover:bg-blue-700",
+  primary:
+    "border border-[#1A56DB] bg-[#1A56DB] text-white hover:bg-[#1548C7] hover:border-[#1548C7]",
 
-    secondary:
-      "bg-white text-slate-900 border border-slate-300 hover:border-blue-600 hover:text-blue-600",
+  secondary:
+    "border border-slate-300 bg-white text-slate-900 hover:border-[#1A56DB] hover:text-[#1A56DB]",
 
-    outline:
-      "bg-transparent text-blue-600 border border-blue-600 hover:bg-blue-600 hover:text-white",
-  };
-
+  outline:
+    "border border-[#1A56DB] bg-transparent text-[#1A56DB] hover:bg-[#1A56DB] hover:text-white",
+};
   return (
     <motion.div
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.2 }}
     >
-      <Link
-        to={to}
-        onClick={onClick}
-        className={`inline-flex items-center justify-center rounded-lg px-8 py-3 font-semibold transition-all duration-300 ${variants[variant]} ${className}`}
-      >
-        {children}
-      </Link>
+     <Link
+  to={to}
+  onClick={onClick}
+  className={`inline-flex items-center justify-center rounded-xl px-6 py-3 text-[15px] font-semibold transition-all duration-300 ${variants[variant]} ${className}`}
+>
+  {children}
+</Link>
     </motion.div>
   );
 };

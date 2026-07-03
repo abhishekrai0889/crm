@@ -25,19 +25,21 @@ const BillingToggle = ({
       className="mt-8 inline-flex items-center gap-4 rounded-full border border-slate-200 bg-white px-5 py-3 shadow-sm"
     >
       <span
-        className={`text-sm font-medium ${
+        className={`text-md font-medium ${
           !annual ? "text-slate-900" : "text-slate-500"
         }`}
       >
         Monthly
       </span>
 
-      <button
-        onClick={handleToggle}
-        className={`relative h-7 w-14 rounded-full transition ${
-          annual ? "bg-blue-600" : "bg-slate-300"
-        }`}
-      >
+     <button
+  onClick={handleToggle}
+  className={`relative h-7 w-14 rounded-full transition-all duration-300 ${
+    annual
+      ? "bg-[var(--blue-600)]"
+      : "bg-[var(--ink-300)]"
+  }`}
+>
         <motion.div
           layout
           transition={{
@@ -52,7 +54,7 @@ const BillingToggle = ({
       </button>
 
       <span
-        className={`text-sm font-medium ${
+        className={`text-md font-medium ${
           annual ? "text-slate-900" : "text-slate-500"
         }`}
       >

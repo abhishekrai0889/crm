@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 
 const PricingHero = () => {
   return (
-    <section className="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white py-20">
+   <section className="border-b border-[var(--line)] bg-[var(--bg)] py-20">
       <div className="mx-auto max-w-[1180px] px-6 text-center">
         <SectionBadge>Pricing</SectionBadge>
 

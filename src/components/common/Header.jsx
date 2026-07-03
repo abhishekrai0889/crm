@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -48,10 +47,7 @@ const Header = () => {
 
             <rect width="40" height="40" rx="10" fill="url(#bg1)" />
 
-            <path
-              d="M12 11h16v4H17v3h9v4h-9v3h11v4H12V11z"
-              fill="white"
-            />
+            <path d="M12 11h16v4H17v3h9v4h-9v3h11v4H12V11z" fill="white" />
           </svg>
 
           <h2 className="text-2xl font-extrabold tracking-tight text-slate-900">
@@ -64,27 +60,29 @@ const Header = () => {
           <ul className="flex items-center gap-2">
             {navLinks.map((item) => (
               <li key={item.path}>
-                <Link
+                <NavLink
                   to={item.path}
-                  className="rounded-lg px-4 py-2 font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-600"
+                  className={({ isActive }) =>
+                    `rounded-lg px-4 py-2 font-medium transition-all duration-200 ${
+                      isActive ? "text-[var(--blue-600)]" : "text-slate-600"
+                    } hover:bg-[var(--blue-50)] hover:text-[var(--blue-600)]`
+                  }
                 >
                   {item.name}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
 
           <div className="flex items-center gap-3">
             <Link
-              to="/login"
-              className="rounded-lg px-4 py-2 font-medium text-slate-700 transition hover:text-blue-600"
+              to="/signin"
+              className="rounded-lg px-4 py-2 font-medium text-slate-700 transition-all duration-200 hover:text-[#1A56DB]"
             >
               Sign In
             </Link>
 
-            <PrimaryButton to="/signup">
-              Start Free Trial
-            </PrimaryButton>
+            <PrimaryButton to="/signup">Start Free Trial</PrimaryButton>
           </div>
         </nav>
 
