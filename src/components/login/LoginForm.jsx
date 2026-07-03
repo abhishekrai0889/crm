@@ -157,27 +157,21 @@ const handleChange = (e) => {
 
           <div className="space-y-3">
 
-           <button
-  className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] bg-white text-[15px] font-semibold text-[var(--ink-700)] transition-all duration-300 hover:border-[var(--blue-400)] hover:bg-slate-50"
->
-  <SiGoogle
-    size={20}
-    className="text-[#4285F4]"
-  />
+            <button
+              className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] text-[15px] font-semibold text-[var(--ink-700)] transition hover:border-[var(--blue-400)] hover:bg-slate-50"
+            >
+              <GoogleIcon sx={{ color: "#EA4335" }} />
 
-  Continue with Google
-</button>
+              Continue with Google
+            </button>
 
-         <button
-  className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] bg-white text-[15px] font-semibold text-[var(--ink-700)] transition-all duration-300 hover:border-[var(--blue-400)] hover:bg-slate-50"
->
-  <SiMicrosoft
-    size={20}
-    className="text-[#00A4EF]"
-  />
+            <button
+              className="flex h-[54px] w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] text-[15px] font-semibold text-[var(--ink-700)] transition hover:border-[var(--blue-400)] hover:bg-slate-50"
+            >
+              <MicrosoftIcon sx={{ color: "#0078D4" }} />
 
-  Continue with Microsoft
-</button>
+              Continue with Microsoft
+            </button>
 
           </div>
 
