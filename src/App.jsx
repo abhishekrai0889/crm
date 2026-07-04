@@ -10,7 +10,7 @@ import SignIn from "./pages/SignIn";
 import Trial from "./pages/Trial"; 
 import Contact from "./pages/Contact";
 import ForgotPassword from "./pages/ForgotPassword";
-
+import BasicTable from "../src/ui/Example/BasicTable"
 function App() {
   const location = useLocation();
 
@@ -30,11 +30,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/signin" element={<SignIn />} />
-         <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Trial />} />
-         <Route path="/forgot-password" element={<ForgotPassword />} />
-         <Route path="/contact" element={<Contact />} />
-    
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/table" element={<BasicTable />} />
       </Routes>
 
       {!hideLayout && <Footer />}
