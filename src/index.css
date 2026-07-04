@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* Add to your global CSS file */
-@keyframes slideDown {
+/* @keyframes slideDown {
   from {
     opacity: 0;
     transform: translateY(-6px);
@@ -10,9 +10,9 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
+} */
 
-@keyframes shake {
+/* @keyframes shake {
   0%, 100% {
     transform: translateX(0);
   }
@@ -22,11 +22,11 @@
   20%, 40%, 60%, 80% {
     transform: translateX(4px);
   }
-}
+} */
 
-.animate-slideDown {
+/* .animate-slideDown {
   animation: slideDown 0.2s ease-out forwards;
-}
+} */
 
 /* .animate-shake {
   animation: shake 0.5s ease-in-out;
@@ -42,6 +42,6 @@
   }
 }
 
-.highlight-error {
+/* .highlight-error {
   animation: highlightError 1s ease-out;
-}
+} */
