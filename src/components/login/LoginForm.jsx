@@ -1,6 +1,6 @@
 import TextInput from "../../ui/TextInput";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import GoogleIcon from "@mui/icons-material/Google";
 import MicrosoftIcon from "@mui/icons-material/Microsoft";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -12,37 +12,184 @@ const LoginForm = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    rememberMe: false,
   });
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const navigate = useNavigate();
+
+  // Create refs for form fields
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
 
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     }));
 
+    // Clear field-specific error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
         [name]: "",
       }));
     }
+
+    // Clear submit error on any change
+    if (submitError) {
+      setSubmitError("");
+    }
+  };
+
+  const validateField = (name, value) => {
+    let error = "";
+
+    switch (name) {
+      case "email":
+        if (!value?.trim()) {
+          error = "Email address is required";
+        } else if (!/\S+@\S+\.\S+/.test(value)) {
+          error = "Please enter a valid email address";
+        }
+        break;
+      case "password":
+        if (!value) {
+          error = "Password is required";
+        } else if (value.length < 8) {
+          error = "Password must be at least 8 characters";
+        }
+        break;
+      default:
+        break;
+    }
+
+    return error;
+  };
+
+  const validateAllFields = () => {
+    const errors = {};
+    let isValid = true;
+
+    // Validate email
+    const emailError = validateField("email", formData.email);
+    if (emailError) {
+      errors.email = emailError;
+      isValid = false;
+    }
+
+    // Validate password
+    const passwordError = validateField("password", formData.password);
+    if (passwordError) {
+      errors.password = passwordError;
+      isValid = false;
+    }
+
+    setErrors(errors);
+    return { isValid, errors };
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    // Validate all fields
+    const { isValid, errors: validationErrors } = validateAllFields();
+
+    if (!isValid) {
+      setIsSubmitting(false);
+
+      // Focus on the first field with an error
+      const firstErrorField = Object.keys(validationErrors)[0];
+      const refMap = {
+        email: emailRef,
+        password: passwordRef,
+      };
+
+      const targetRef = refMap[firstErrorField];
+      if (targetRef?.current) {
+        // Focus on the field and trigger validation
+        targetRef.current.focus();
+        if (targetRef.current.validate) {
+          targetRef.current.validate();
+        }
+      }
+
+      // Scroll to the first error
+      const errorElement = document.querySelector(`[id$="-error"]`);
+      if (errorElement) {
+        errorElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+
+      return;
+    }
+
+    // Simulate API call
+    try {
+      console.log("Login attempt:", {
+        email: formData.email,
+        password: formData.password,
+        rememberMe: formData.rememberMe,
+      });
+
+      // Simulate API request
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          // Simulate successful login
+          if (
+            formData.email === "demo@company.com" &&
+            formData.password === "password123"
+          ) {
+            resolve({ success: true });
+          } else {
+            reject(new Error("Invalid email or password"));
+          }
+        }, 1500);
+      });
+
+      // Successful login
+      console.log("Login successful!");
+
+      // Redirect to dashboard or home page
+      navigate("/dashboard");
+    } catch (error) {
+      // Handle login error
+      setSubmitError(error.message || "Failed to sign in. Please try again.");
+
+      // Focus on email field for correction
+      if (emailRef.current) {
+        emailRef.current.focus();
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSocialLogin = (provider) => {
+    console.log(`Signing in with ${provider}`);
+    // Implement social login logic here
+    // For now, just show a message
+    alert(`Signing in with ${provider}...`);
   };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[var(--bg)] px-6 py-10">
       <div className="w-full max-w-[600px]">
         {/* Mobile Logo */}
-
         <div className="mb-8 flex items-center justify-center gap-3 lg:hidden">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#2E6BEF,#10399A)]">
             <span className="text-xl font-bold text-white">E</span>
           </div>
-
           <h2 className="text-[32px] font-extrabold tracking-[-0.03em] text-[var(--ink-900)]">
             ENTH
             <span className="text-[var(--blue-600)]">IS</span>
@@ -50,21 +197,19 @@ const LoginForm = () => {
         </div>
 
         {/* Card */}
-
         <div className="rounded-[24px] border border-[var(--line)] bg-white p-9 shadow-[0_12px_45px_rgba(16,57,154,.08)]">
           <h1 className="text-[34px] font-bold text-[var(--ink-900)]">
             Sign in
           </h1>
-
           <p className="mt-2 text-[15px] text-[var(--ink-500)]">
             Welcome back — sign in to your workspace.
           </p>
 
           {/* Form */}
-          <form className="mt-8 space-y-6">
+          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             {/* Email */}
-
             <TextInput
+              ref={emailRef}
               label="Email address"
               name="email"
               type="email"
@@ -75,12 +220,15 @@ const LoginForm = () => {
               required
               icon={EmailOutlinedIcon}
               iconPosition="left"
+              validateOnFocus={true}
+              scrollToError={true}
+              autoFocus={false}
             />
 
             {/* Password */}
-
             <div className="relative">
               <TextInput
+                ref={passwordRef}
                 label="Password"
                 name="password"
                 type={showPassword ? "text" : "password"}
@@ -91,12 +239,15 @@ const LoginForm = () => {
                 required
                 icon={LockOutlinedIcon}
                 iconPosition="left"
+                validateOnFocus={true}
+                scrollToError={true}
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[31px] flex h-10 w-10 items-center justify-center rounded-lg text-[var(--ink-500)] hover:bg-slate-100"
+                className="absolute right-3 top-[31px] flex h-10 w-10 items-center justify-center rounded-lg text-[var(--ink-500)] hover:bg-slate-100 transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
                   <VisibilityOffOutlinedIcon fontSize="small" />
@@ -106,12 +257,14 @@ const LoginForm = () => {
               </button>
             </div>
 
-            {/* Remember */}
-
+            {/* Remember Me & Forgot Password */}
             <div className="flex items-center justify-between">
               <label className="flex cursor-pointer items-center gap-2 text-[14px] text-[var(--ink-700)]">
                 <input
                   type="checkbox"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
                   className="h-4 w-4 accent-[var(--blue-600)]"
                 />
                 Remember me
@@ -125,35 +278,80 @@ const LoginForm = () => {
               </Link>
             </div>
 
-            {/* Submit */}
+            {/* Submit Error Message */}
+            {submitError && (
+              <div className="text-sm text-red-500 flex items-start gap-1.5 p-3 bg-red-50 rounded-lg border border-red-200">
+                <svg
+                  className="w-4 h-4 mt-0.5 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>{submitError}</span>
+              </div>
+            )}
 
+            {/* Submit Button */}
             <button
               type="submit"
-              className="flex h-[56px] w-full cursor-pointer items-center justify-center rounded-xl bg-[var(--blue-600)] text-[16px] font-semibold text-white transition-all duration-300 hover:bg-[var(--blue-700)]"
+              disabled={isSubmitting}
+              className={`
+                flex h-[56px] w-full cursor-pointer items-center justify-center 
+                rounded-xl bg-[var(--blue-600)] text-[16px] font-semibold text-white 
+                transition-all duration-300 hover:bg-[var(--blue-700)]
+                ${isSubmitting ? "opacity-70 cursor-not-allowed" : ""}
+              `}
             >
-              Sign in
+              {isSubmitting ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  Signing in...
+                </>
+              ) : (
+                "Sign in"
+              )}
             </button>
           </form>
-          {/* Divider */}
 
+          {/* Divider */}
           <div className="my-8 flex items-center gap-4">
             <div className="h-px flex-1 bg-[var(--line)]"></div>
-
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--ink-300)]">
-            OR SIGN UP WITH
-
+              OR SIGN UP WITH
             </span>
-
             <div className="h-px flex-1 bg-[var(--line)]"></div>
           </div>
 
-          {/* Social */}
-
+          {/* Social Buttons */}
           <div className="flex gap-4">
             {/* Google */}
-
             <button
               type="button"
+              onClick={() => handleSocialLogin("Google")}
               className="flex h-[54px] flex-1 cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] bg-white px-4 text-[15px] font-semibold text-[var(--ink-700)] transition-all duration-300 hover:border-[var(--blue-400)] hover:bg-slate-50"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -178,9 +376,9 @@ const LoginForm = () => {
             </button>
 
             {/* Microsoft */}
-
             <button
               type="button"
+              onClick={() => handleSocialLogin("Microsoft")}
               className="flex h-[54px] flex-1 cursor-pointer items-center justify-center gap-3 rounded-xl border border-[var(--line)] bg-white px-4 text-[15px] font-semibold text-[var(--ink-700)] transition-all duration-300 hover:border-[var(--blue-400)] hover:bg-slate-50"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -195,7 +393,6 @@ const LoginForm = () => {
         </div>
 
         {/* Footer */}
-
         <p className="mt-8 text-center text-[15px] text-[var(--ink-500)]">
           No account yet?{" "}
           <Link
