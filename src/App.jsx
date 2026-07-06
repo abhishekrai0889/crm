@@ -138,21 +138,21 @@ function App() {
             }
           />
           <Route
-  path="/privacy-policy"
-  element={
-    <PublicRoute>
-      <PrivacyPolicy />
-    </PublicRoute>
-  }
-/>
- <Route
-  path="/terms-of-service"
-  element={
-    <PublicRoute>
-      <Terms />
-    </PublicRoute>
-  }
-/>
+            path="/privacy-policy"
+            element={
+              <PublicRoute>
+                <PrivacyPolicy />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/terms-of-service"
+            element={
+              <PublicRoute>
+                <Terms />
+              </PublicRoute>
+            }
+          />
           <Route
             path="/table"
             element={
@@ -173,6 +173,8 @@ function App() {
           }
         >
           <Route index element={<Dashboard />} />
+          <Route path="organizations" element={<BasicTable />} />
+          {/* <Route path="/terms-of-service" element={<BasicTable />} /> */}
           {/* Add more protected routes here */}
         </Route>
 
