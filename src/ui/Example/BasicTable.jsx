@@ -55,9 +55,9 @@ const BasicTable = () => {
       searchable: true,
       render: (value) => (
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-semibold shadow-md">
+          {/* <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-semibold shadow-md">
             {value.charAt(0)}
-          </div>
+          </div> */}
           <span className="text-sm font-medium text-slate-700">{value}</span>
         </div>
       ),

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import bgImage from "../assets/found.webp";
 import {
   Error,
   Home,
@@ -20,80 +21,103 @@ function NotFoundPage() {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-        <div className="space-y-6">
-          {/* Header */}
+    <div
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat p-4"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+      }}
+    >
+      <div className="absolute inset-0 bg-[#081326]/70"></div>
+
+      {/* Card */}
+      <div className="relative z-10 w-full max-w-[500px] overflow-hidden rounded-[28px] border border-white/20 bg-white/10 p-8 backdrop-blur-2xl shadow-[0_25px_80px_rgba(0,0,0,0.45)]">
+        <div className="absolute -top-24 -right-20 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 h-52 w-52 rounded-full bg-cyan-400/10 blur-3xl" />
+
+        <div className="relative z-10">
           <div className="flex justify-center">
-            <div className="p-4 bg-red-100 dark:bg-red-900/30 rounded-full">
-              <Error sx={{ fontSize: 56, color: "#ef4444" }} />
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-500/15 ring-8 ring-red-500/10">
+              <Error
+                sx={{
+                  fontSize: 48,
+                  color: "#FF5A5F",
+                }}
+              />
             </div>
           </div>
 
-          <div className="text-center">
-            <h1 className="text-6xl font-bold text-gray-900 dark:text-white">
+          <div className="mt-5 text-center">
+            <h1 className="text-[78px] font-black leading-none tracking-tight text-white">
               404
             </h1>
-            <p className="text-lg font-semibold text-gray-700 dark:text-gray-300 mt-1">
+
+            <h2 className="mt-2 text-[36px] font-bold text-white">
               Page Not Found
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              The page you're looking for doesn't exist or has been moved.
+            </h2>
+
+            <p className="mx-auto mt-3 max-w-[360px] text-[15px] leading-7 text-white/70">
+              Sorry, the page you're looking for doesn't exist, has been moved
+              or is temporarily unavailable.
             </p>
           </div>
 
-          {/* Actions */}
-          <div className="space-y-3">
+          <div className="mt-7 space-y-3">
             <button
               onClick={() => navigate("/", { replace: true })}
-              className="w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="flex h-14 w-full items-center justify-center cursor-pointer gap-3 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#4F7EFF] text-[16px] font-semibold text-white shadow-lg shadow-blue-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-blue-500/50"
             >
-              <Home sx={{ fontSize: 20 }} />
+              <Home />
               Go to Homepage
             </button>
+
             <button
               onClick={() => navigate(-1)}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="flex h-14 w-full items-center justify-center cursor-pointer gap-3 rounded-xl border border-white/20 bg-white/5 text-[16px] font-medium text-white transition-all duration-300 hover:bg-white/10"
             >
-              <ArrowBack sx={{ fontSize: 20 }} />
+              <ArrowBack />
               Go Back
             </button>
           </div>
 
-          {/* Suggestions */}
-          <div>
-            <div className="flex items-center gap-2 justify-center text-sm text-gray-500 dark:text-gray-400 mb-3">
-              <Lightbulb sx={{ fontSize: 16 }} />
-              <span>What would you like to do?</span>
+          <div className="mt-7">
+            <div className="mb-4 flex items-center justify-center gap-2 text-white/70">
+              <Lightbulb sx={{ fontSize: 18 }} />
+              <span className="font-medium">Quick Actions</span>
             </div>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {suggestions.map((suggestion, index) => (
+
+            <div className="flex flex-wrap justify-center gap-2">
+              {suggestions.map((item, index) => (
                 <button
                   key={index}
-                  onClick={suggestion.action}
-                  className="px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  onClick={item.action}
+                  className="rounded-full border border-white/20 bg-white/5 px-4 py-2 text-[13px] text-white transition-all duration-300 hover:border-blue-500 hover:bg-blue-500"
                 >
-                  {suggestion.label}
+                  {item.label}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Search */}
-          <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700/50 rounded-lg p-2 pl-4">
-            <Search sx={{ fontSize: 20, color: "#9ca3af" }} />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400"
-              onKeyDown={(e) => e.key === "Enter" && navigate("/search")}
-            />
-            <button
-              onClick={() => navigate("/search")}
-              className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition-colors"
-            >
-              Search
-            </button>
+          <div className="mt-7">
+            <div className="flex overflow-hidden rounded-xl border border-white/20 bg-white/5">
+              <div className="flex items-center px-4 text-white/50">
+                <Search />
+              </div>
+
+              <input
+                type="text"
+                placeholder="Search..."
+                className="flex-1 bg-transparent px-2 py-4 text-white placeholder:text-white/40 focus:outline-none"
+                onKeyDown={(e) => e.key === "Enter" && navigate("/search")}
+              />
+
+              <button
+                onClick={() => navigate("/search")}
+                className="bg-gradient-to-r from-[#2563EB] to-[#4F7EFF] px-7 font-semibold text-white transition-all duration-300 hover:brightness-110"
+              >
+                Search
+              </button>
+            </div>
           </div>
         </div>
       </div>

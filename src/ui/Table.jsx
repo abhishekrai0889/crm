@@ -8,6 +8,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 import CloseIcon from "@mui/icons-material/Close";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SwapVertRoundedIcon from "@mui/icons-material/SwapVertRounded";
 
 const Table = ({
   // Core props
@@ -446,416 +447,594 @@ const Table = ({
       style={{ maxHeight }}
     >
       {/* Header Section */}
-      <div className="px-4 sm:px-6 py-4 border-b border-slate-200">
-        <div className="flex flex-col gap-4">
-          {/* Toolbar - Title takes 4 cols, search and actions on right */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            {/* Left side - Custom Filters and Left Toolbar (Optional) */}
-            <div className="flex items-center gap-2 flex-1">
-              {/* Title and Subtitle - Full width */}
-              {(title || subtitle) && (
-                <div className="w-full">
-                  {title && (
-                    <h2 className="text-xl font-bold text-slate-800">
-                      {title}
-                    </h2>
-                  )}
-                  {subtitle && (
-                    <p className="text-sm text-slate-500">{subtitle}</p>
-                  )}
-                </div>
-              )}
-            </div>
+    {/* ========================= HEADER SECTION ========================= */}
 
-            {/* Right side - Search and Actions */}
-            <div className="flex items-center gap-2 flex-wrap ml-auto">
-              {toolbarRight}
+<div
+  className="
+    border-b
+    border-slate-200
+    bg-gradient-to-r
+    from-white
+    via-[#FCFDFF]
+    to-[#F5F9FF]
+    px-8
+    py-7
+    rounded-t-[25px]
+  "
+>
 
-              {/* Search Bar - Now on the right side */}
-              {showSearch && (
-                <div className="relative min-w-[200px] max-w-xs">
-                  <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <input
-                    type="text"
-                    placeholder={searchPlaceholder}
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-200"
-                  />
-                </div>
-              )}
+  <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 
-              {showColumnVisibility && (
-                <div className="relative">
-                  <button
-                    onClick={() => setShowColumnFilter(!showColumnFilter)}
-                    className={`p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all duration-200 ${
-                      showColumnFilter ? "bg-slate-100" : ""
-                    }`}
-                    title="Customize columns"
-                  >
-                    <ViewColumnIcon className="w-4 h-4" />
-                  </button>
+    {/* Left */}
+    <div className="flex-1">
 
-                  {showColumnFilter && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-slate-200 p-3 z-20"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-semibold text-slate-700">
-                          Columns
-                        </span>
-                        <button
-                          onClick={() => setShowColumnFilter(false)}
-                          className="text-slate-400 hover:text-slate-600"
-                        >
-                          <CloseIcon className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="space-y-1 max-h-48 overflow-y-auto">
-                        {columns.map((col) => (
-                          <label
-                            key={col.key}
-                            className="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={visibleColumns.includes(col.key)}
-                              onChange={() => toggleColumnVisibility(col.key)}
-                              className="w-3.5 h-3.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                            />
-                            <span className="text-sm text-slate-600">
-                              {col.header || col.key}
-                            </span>
-                          </label>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
-              )}
+      {(title || subtitle) && (
+        <div>
 
-              {showRefresh && (
-                <button
-                  onClick={handleRefresh}
-                  className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all duration-200 hover:rotate-180"
-                  title="Refresh"
-                >
-                  <RefreshIcon className="w-4 h-4" />
-                </button>
-              )}
+          {title && (
+            <h2 className="text-[30px] font-bold tracking-[-0.03em] text-slate-900">
+              {title}
+            </h2>
+          )}
 
-              {showExport && (
-                <button
-                  onClick={handleExport}
-                  className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all duration-200"
-                  title="Export"
-                >
-                  <DownloadIcon className="w-4 h-4" />
-                </button>
-              )}
+          {subtitle && (
+            <p className="mt-2 text-[15px] text-slate-500">
+              {subtitle}
+            </p>
+          )}
 
-              {toolbarActions.map((action, index) => (
-                <button
-                  key={index}
-                  onClick={action.onClick}
-                  className={`
-                    px-4 py-2 rounded-lg text-sm font-medium
-                    transition-all duration-200
-                    ${
-                      action.variant === "primary"
-                        ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-200"
-                        : action.variant === "success"
-                          ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md shadow-emerald-200"
-                          : action.variant === "danger"
-                            ? "bg-red-600 text-white hover:bg-red-700 shadow-md shadow-red-200"
-                            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                    }
-                    flex items-center gap-1.5
-                  `}
-                >
-                  {action.icon}
-                  {action.label}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
-      </div>
+      )}
+
+    </div>
+
+    {/* Right */}
+
+    <div className="flex flex-wrap items-center justify-end gap-3">
+
+      {toolbarRight}
+
+      {/* Search */}
+
+      {showSearch && (
+        <div className="relative w-[330px] max-w-full">
+
+          <SearchIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+
+          <input
+            type="text"
+            placeholder={searchPlaceholder}
+            value={searchTerm}
+            onChange={handleSearch}
+            className="
+              h-12
+              w-full
+              rounded-2xl
+              border
+              border-slate-200
+              bg-white
+              pl-12
+              pr-4
+              text-[15px]
+              shadow-sm
+              outline-none
+              transition-all
+              duration-300
+              placeholder:text-slate-400
+              focus:border-[#2563EB]
+              focus:ring-4
+              focus:ring-blue-100
+            "
+          />
+
+        </div>
+      )}
+
+      {/* Column Button */}
+
+      {showColumnVisibility && (
+        <div className="relative">
+
+          <button
+            onClick={() => setShowColumnFilter(!showColumnFilter)}
+            className={`
+              flex
+              h-12
+              w-12
+              items-center
+              justify-center
+              rounded-2xl
+              border
+              border-slate-200
+              bg-white
+              shadow-sm
+              transition-all
+              duration-300
+              hover:border-blue-300
+              hover:bg-blue-50
+              hover:text-blue-600
+              ${
+                showColumnFilter
+                  ? "border-blue-300 bg-blue-50 text-blue-600"
+                  : "text-slate-600"
+              }
+            `}
+          >
+            <ViewColumnIcon className="h-5 w-5" />
+          </button>
+
+          {showColumnFilter && (
+            <motion.div
+              initial={{ opacity: 0, scale: .95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: .95, y: 10 }}
+              className="absolute right-0 z-30 mt-3 w-64 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_25px_60px_rgba(15,23,42,.12)]"
+            >
+
+              <div className="border-b border-slate-100 px-5 py-4 flex items-center justify-between">
+
+                <span className="font-semibold text-slate-800">
+                  Customize Columns
+                </span>
+
+                <button
+                  onClick={() => setShowColumnFilter(false)}
+                  className="rounded-lg p-1 hover:bg-slate-100"
+                >
+                  <CloseIcon className="h-4 w-4" />
+                </button>
+
+              </div>
+
+              <div className="max-h-72 overflow-y-auto p-4 space-y-2">
+
+                {columns.map((col) => (
+
+                  <label
+                    key={col.key}
+                    className="flex cursor-pointer items-center gap-3 rounded-xl p-3 transition hover:bg-slate-50"
+                  >
+
+                    <input
+                      type="checkbox"
+                      checked={visibleColumns.includes(col.key)}
+                      onChange={() => toggleColumnVisibility(col.key)}
+                      className="h-4 w-4 rounded border-slate-300 text-blue-600"
+                    />
+
+                    <span className="text-sm text-slate-700">
+                      {col.header || col.key}
+                    </span>
+
+                  </label>
+
+                ))}
+
+              </div>
+
+            </motion.div>
+          )}
+
+        </div>
+      )}
+
+      {/* Refresh */}
+
+      {showRefresh && (
+
+        <button
+          onClick={handleRefresh}
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:rotate-180 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
+        >
+          <RefreshIcon className="h-5 w-5" />
+        </button>
+
+      )}
+
+      {/* Export */}
+
+      {showExport && (
+
+        <button
+          onClick={handleExport}
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-600 shadow-sm transition-all duration-300 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600"
+        >
+          <DownloadIcon className="h-5 w-5" />
+        </button>
+
+      )}
+
+      {/* Action Buttons */}
+
+      {toolbarActions.map((action, index) => (
+
+        <button
+          key={index}
+          onClick={action.onClick}
+          className={`
+            flex
+            h-12
+            items-center
+            gap-2
+            rounded-2xl
+            px-6
+            text-[15px]
+            font-semibold
+            transition-all
+            duration-300
+            ${
+              action.variant === "primary"
+                ? "bg-gradient-to-r from-[#2563EB] to-[#3B82F6] text-white shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 hover:shadow-blue-500/50"
+                : action.variant === "success"
+                ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white"
+                : action.variant === "danger"
+                ? "bg-gradient-to-r from-red-500 to-red-600 text-white"
+                : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+            }
+          `}
+        >
+          {action.icon}
+          {action.label}
+        </button>
+
+      ))}
+
+    </div>
+
+  </div>
+
+</div>
 
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead
+     <thead
+  className={`
+    sticky top-0 z-20
+    bg-gradient-to-r
+    from-[#1D4ED8]
+    via-[#2563EB]
+    to-[#3B82F6]
+    border-b border-blue-700
+    shadow-lg
+    ${headerClassName}
+  `}
+>
+  <tr className="h-[52px]">
+
+    {/* Select All */}
+
+    {selectable && (
+      <th className="w-14 px-4">
+        <input
+          type="checkbox"
+          checked={
+            paginatedData.length > 0 &&
+            paginatedData.every((item) =>
+              internalSelectedRows.includes(getRowKey(item))
+            )
+          }
+          onChange={handleSelectAll}
+          className="h-4 w-4 rounded border-white/40 bg-white text-blue-600 focus:ring-2 focus:ring-white"
+        />
+      </th>
+    )}
+
+    {/* Expand */}
+
+    {expandable && <th className="w-10" />}
+
+    {/* Columns */}
+
+    {getVisibleColumns().map((col) => (
+      <th
+        key={col.key}
+        onClick={() =>
+          sortableFieldsList.includes(col.key) &&
+          handleSort(col.key)
+        }
+        style={col.width ? { minWidth: col.width } : {}}
+        className={`
+          px-3
+          py-3
+          text-left
+          whitespace-nowrap
+          transition-all
+          duration-200
+          ${
+            sortableFieldsList.includes(col.key)
+              ? "cursor-pointer"
+              : ""
+          }
+        `}
+      >
+        <div
+          className={`
+            inline-flex
+            items-center
+            gap-1.5
+            rounded-md
+           
+            py-1
+            transition-all
+            duration-200
+            ${
+              sortableFieldsList.includes(col.key)
+                ? "hover:bg-white/15"
+                : ""
+            }
+          `}
+        >
+          <span
             className={`
-              ${currentTheme.header}
-              border-b ${currentTheme.border}
-              ${stickyHeader ? "sticky top-0 z-10" : ""}
-              ${headerClassName}
+              text-[13px]
+              font-semibold
+              tracking-wide
+              ${
+                sortField === col.key
+                  ? "text-white"
+                  : "text-blue-100"
+              }
             `}
           >
-            <tr>
-              {selectable && (
-                <th className="px-4 py-3 w-10">
-                  <input
-                    type="checkbox"
-                    checked={
-                      paginatedData.length > 0 &&
-                      paginatedData.every((item) =>
-                        internalSelectedRows.includes(getRowKey(item)),
-                      )
-                    }
-                    onChange={handleSelectAll}
-                    className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+            {col.header || col.key}
+          </span>
+
+          {sortableFieldsList.includes(col.key) && (
+            <SwapVertRoundedIcon
+              sx={{
+                fontSize: 16,
+                color:
+                  sortField === col.key
+                    ? "#ffffff"
+                    : "rgba(255,255,255,0.75)",
+              }}
+            />
+          )}
+        </div>
+      </th>
+    ))}
+
+    {/* Actions */}
+
+    {(actions.length > 0 || actionMenuItems.length > 0) && (
+      <th className="w-24 px-4 text-right">
+        <span className="text-[13px] font-semibold tracking-wide text-white">
+          Actions
+        </span>
+      </th>
+    )}
+  </tr>
+</thead>
+    <tbody className={`${bodyClassName}`}>
+      {loading ? (
+        renderLoadingSkeleton()
+      ) : paginatedData.length === 0 ? (
+        <tr>
+          <td
+            colSpan={
+              getVisibleColumns().length +
+              (selectable ? 1 : 0) +
+              (expandable ? 1 : 0) +
+              (actions.length > 0 || actionMenuItems.length > 0 ? 1 : 0)
+            }
+            className="px-4 py-20 text-center"
+          >
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
                   />
-                </th>
-              )}
-              {expandable && <th className="px-2 py-3 w-8"></th>}
-              {getVisibleColumns().map((col) => (
-                <th
-                  key={col.key}
-                  onClick={() => handleSort(col.key)}
-                  className={`
-                    px-4 py-3 text-left
-                    text-xs font-semibold
-                    ${currentTheme.text}
-                    uppercase tracking-wider
-                    ${sortableFieldsList.includes(col.key) ? "cursor-pointer hover:text-blue-600" : ""}
-                    ${densityClasses[density]}
-                    ${col.width ? `min-w-[${col.width}]` : ""}
-                  `}
-                  style={col.width ? { minWidth: col.width } : {}}
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span>{col.header || col.key}</span>
-                    {sortableFieldsList.includes(col.key) && (
-                      <span className="text-slate-400">
-                        {sortField === col.key &&
-                          (sortDirection === "asc" ? "↑" : "↓")}
-                      </span>
-                    )}
-                  </div>
-                </th>
-              ))}
-              {(actions.length > 0 || actionMenuItems.length > 0) && (
-                <th className="px-4 py-3 w-12 text-right">
-                  <span
-                    className={`text-xs font-semibold ${currentTheme.text} uppercase tracking-wider`}
-                  >
-                    Actions
-                  </span>
-                </th>
-              )}
-            </tr>
-          </thead>
+                </svg>
+              </div>
+              <p className="text-sm font-semibold text-slate-700">{emptyMessage}</p>
+              <p className="text-xs text-slate-400">Try adjusting your search or filter</p>
+            </div>
+          </td>
+        </tr>
+      ) : (
+        paginatedData.map((item, index) => {
+          const rowKey = getRowKey(item);
+          const isSelected = internalSelectedRows.includes(rowKey);
+          const isExpanded = expandedRows.includes(rowKey);
 
-          <tbody className={`divide-y ${currentTheme.border} ${bodyClassName}`}>
-            {loading ? (
-              renderLoadingSkeleton()
-            ) : paginatedData.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={
-                    getVisibleColumns().length +
-                    (selectable ? 1 : 0) +
-                    (expandable ? 1 : 0) +
-                    (actions.length > 0 || actionMenuItems.length > 0 ? 1 : 0)
-                  }
-                  className="px-4 py-16 text-center"
-                >
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center">
+          return (
+            <React.Fragment key={rowKey}>
+              <tr
+                className={`
+                  group border-b border-slate-100 last:border-0
+                  transition-colors duration-150
+                  ${isSelected ? "bg-slate-50" : "hover:bg-slate-50/70"}
+                  ${rowClassName}
+                `}
+              >
+                {selectable && (
+                  <td className="px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => handleRowSelect(rowKey)}
+                      className="w-3.5 h-3.5 rounded-[4px] border-slate-300 text-slate-900 accent-slate-900 focus:ring-slate-400/30"
+                    />
+                  </td>
+                )}
+                {expandable && (
+                  <td className="px-2 py-3">
+                    <button
+                      onClick={() => toggleRowExpansion(rowKey)}
+                      className="w-4 h-4 flex items-center justify-center rounded hover:bg-slate-200/60 transition-colors"
+                    >
                       <svg
-                        className="w-8 h-8 text-slate-400"
+                        className={`w-2.5 h-2.5 text-slate-400 transition-transform ${isExpanded ? "rotate-90" : ""}`}
+                        viewBox="0 0 12 12"
                         fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1.5}
-                          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                        />
+                        <path d="M4 2.5L8 6L4 9.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                    </div>
-                    <p className="text-lg font-medium text-slate-700">
-                      {emptyMessage}
-                    </p>
-                    <p className="text-sm text-slate-400">
-                      Try adjusting your search or filter
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              paginatedData.map((item, index) => {
-                const rowKey = getRowKey(item);
-                const isSelected = internalSelectedRows.includes(rowKey);
-                const isExpanded = expandedRows.includes(rowKey);
-                const isEven = index % 2 === 0;
+                    </button>
+                  </td>
+                )}
+                {getVisibleColumns().map((col) => {
+                  const value = getNestedValue(item, col.key);
 
-                return (
-                  <React.Fragment key={rowKey}>
-                    <tr
+                  // Name-type column: avatar + bold name
+                  if (col.avatar) {
+                    const initial = String(value || "?").trim().charAt(0).toUpperCase();
+                    return (
+                      <td key={col.key} className="px-4 py-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-[11px] font-semibold flex-shrink-0">
+                            {initial}
+                          </div>
+                          <span className="text-sm font-medium text-slate-800 whitespace-nowrap">
+                            {col.render ? col.render(value, item, index) : value}
+                          </span>
+                        </div>
+                      </td>
+                    );
+                  }
+
+                  // Badge-type column (Created By: User / Admin)
+                  if (col.badge) {
+                    const badgeStyles =
+                      value === "Admin"
+                        ? "bg-violet-50 text-violet-600"
+                        : "bg-blue-50 text-blue-600";
+                    return (
+                      <td key={col.key} className="px-4 py-3">
+                        <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-medium ${badgeStyles}`}>
+                          {col.render ? col.render(value, item, index) : value}
+                        </span>
+                      </td>
+                    );
+                  }
+
+                  // Status-type column — compact dot-style badge
+                  if (col.status) {
+                    const statusConfig =
+                      {
+                        Approved: { dot: "bg-teal-500", text: "text-teal-700", bg: "bg-teal-50/80" },
+                        Pending: { dot: "bg-orange-500", text: "text-orange-700", bg: "bg-orange-50/80" },
+                        Rejected: { dot: "bg-red-500", text: "text-red-700", bg: "bg-red-50/80" },
+                      }[value] || { dot: "bg-slate-400", text: "text-slate-600", bg: "bg-slate-50" };
+
+                    return (
+                      <td key={col.key} className="px-4 py-3">
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[11px] font-medium ${statusConfig.bg} ${statusConfig.text}`}
+                        >
+                          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${statusConfig.dot}`} />
+                          {col.render ? col.render(value, item, index) : value}
+                        </span>
+                      </td>
+                    );
+                  }
+
+                  return (
+                    <td
+                      key={col.key}
                       className={`
-                        transition-all duration-200
-                        ${stripedRows ? (isEven ? "bg-white/50" : "bg-slate-50/50") : ""}
-                        ${isSelected ? currentTheme.selected : ""}
-                        ${hoverEffect !== "none" ? hoverEffectClasses[hoverEffect] : ""}
-                        ${rowClassName}
+                        px-4 py-3 text-sm text-slate-600 whitespace-nowrap
+                        ${cellClassName}
+                        ${densityClasses[density]}
                       `}
                     >
-                      {selectable && (
-                        <td className="px-4 py-3">
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={() => handleRowSelect(rowKey)}
-                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                          />
-                        </td>
-                      )}
-                      {expandable && (
-                        <td className="px-2 py-3">
-                          <button
-                            onClick={() => toggleRowExpansion(rowKey)}
-                            className="p-1 hover:bg-slate-100 rounded-lg transition-colors"
-                          >
-                            {isExpanded ? "▼" : "▶"}
-                          </button>
-                        </td>
-                      )}
-                      {getVisibleColumns().map((col) => (
-                        <td
-                          key={col.key}
+                      {col.render ? col.render(value, item, index) : value || "—"}
+                    </td>
+                  );
+                })}
+                {(actions.length > 0 || actionMenuItems.length > 0) && (
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex items-center justify-end gap-0.5">
+                      {actions.map((action, idx) => (
+                        <button
+                          key={idx}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (action.onClick) action.onClick(item);
+                          }}
                           className={`
-                            px-4 py-3
-                            ${currentTheme.text}
-                            ${cellClassName}
-                            ${densityClasses[density]}
+                            p-1 rounded-md text-slate-400
+                            transition-colors duration-150
+                            hover:bg-slate-100 hover:text-slate-600
+                            ${action.className || ""}
                           `}
+                          title={action.label}
                         >
-                          {col.render
-                            ? col.render(
-                                getNestedValue(item, col.key),
-                                item,
-                                index,
-                              )
-                            : getNestedValue(item, col.key) || "-"}
-                        </td>
+                          {action.icon}
+                        </button>
                       ))}
-                      {(actions.length > 0 || actionMenuItems.length > 0) && (
-                        <td className="px-4 py-3 text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            {/* Quick Actions */}
-                            {actions.map((action, idx) => (
-                              <button
-                                key={idx}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  if (action.onClick) action.onClick(item);
-                                }}
-                                className={`
-                                  p-1.5 rounded-lg
-                                  transition-all duration-200
-                                  hover:scale-110 hover:bg-slate-100
-                                  ${action.className || ""}
-                                `}
-                                title={action.label}
+
+                      {actionMenuItems.length > 0 && (
+                        <div className="relative">
+                          <button
+                            onClick={(e) => handleActionMenuToggle(rowKey, e)}
+                            className="p-1 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+                          >
+                            <MoreVertIcon className="w-3.5 h-3.5" />
+                          </button>
+
+                          <AnimatePresence>
+                            {actionMenuOpen === rowKey && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.96, y: -6 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.96, y: -6 }}
+                                transition={{ duration: 0.15 }}
+                                className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-30"
                               >
-                                {action.icon}
-                              </button>
-                            ))}
-
-                            {/* Action Menu */}
-                            {actionMenuItems.length > 0 && (
-                              <div className="relative">
-                                <button
-                                  onClick={(e) =>
-                                    handleActionMenuToggle(rowKey, e)
-                                  }
-                                  className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors opacity-0 group-hover:opacity-100"
-                                >
-                                  <MoreVertIcon className="w-4 h-4 text-slate-400" />
-                                </button>
-
-                                <AnimatePresence>
-                                  {actionMenuOpen === rowKey && (
-                                    <motion.div
-                                      initial={{
-                                        opacity: 0,
-                                        scale: 0.95,
-                                        y: -10,
-                                      }}
-                                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                      className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-slate-200 py-1 z-30"
-                                    >
-                                      {actionMenuItems.map((action, idx) => (
-                                        <button
-                                          key={idx}
-                                          onClick={(e) =>
-                                            handleActionClick(action, item, e)
-                                          }
-                                          className={`
-                                            w-full px-4 py-2 text-sm text-left
-                                            hover:bg-slate-50
-                                            transition-colors duration-150
-                                            flex items-center gap-2
-                                            ${action.danger ? "text-red-600 hover:bg-red-50" : "text-slate-700"}
-                                            ${idx === 0 ? "rounded-t-xl" : ""}
-                                            ${idx === actionMenuItems.length - 1 ? "rounded-b-xl" : ""}
-                                          `}
-                                        >
-                                          {action.icon && (
-                                            <span className="text-lg">
-                                              {action.icon}
-                                            </span>
-                                          )}
-                                          {action.label}
-                                          {action.shortcut && (
-                                            <span className="ml-auto text-xs text-slate-400">
-                                              {action.shortcut}
-                                            </span>
-                                          )}
-                                        </button>
-                                      ))}
-                                    </motion.div>
-                                  )}
-                                </AnimatePresence>
-                              </div>
+                                {actionMenuItems.map((action, idx) => (
+                                  <button
+                                    key={idx}
+                                    onClick={(e) => handleActionClick(action, item, e)}
+                                    className={`
+                                      w-full px-3 py-1.5 text-[13px] text-left
+                                      hover:bg-slate-50
+                                      transition-colors duration-150
+                                      flex items-center gap-2
+                                      ${action.danger ? "text-red-600 hover:bg-red-50" : "text-slate-700"}
+                                    `}
+                                  >
+                                    {action.icon && <span className="text-sm">{action.icon}</span>}
+                                    {action.label}
+                                    {action.shortcut && (
+                                      <span className="ml-auto text-[11px] text-slate-400">{action.shortcut}</span>
+                                    )}
+                                  </button>
+                                ))}
+                              </motion.div>
                             )}
-                          </div>
-                        </td>
+                          </AnimatePresence>
+                        </div>
                       )}
-                    </tr>
-                    {expandable && isExpanded && renderExpandedRow && (
-                      <tr>
-                        <td
-                          colSpan={
-                            getVisibleColumns().length +
-                            (selectable ? 1 : 0) +
-                            (actions.length > 0 || actionMenuItems.length > 0
-                              ? 1
-                              : 0) +
-                            1
-                          }
-                        >
-                          <div className="px-4 py-3 bg-slate-50/50">
-                            {renderExpandedRow(item)}
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                );
-              })
-            )}
-          </tbody>
+                    </div>
+                  </td>
+                )}
+              </tr>
+              {expandable && isExpanded && renderExpandedRow && (
+                <tr>
+                  <td
+                    colSpan={
+                      getVisibleColumns().length +
+                      (selectable ? 1 : 0) +
+                      (actions.length > 0 || actionMenuItems.length > 0 ? 1 : 0) +
+                      1
+                    }
+                    className="border-b border-slate-100"
+                  >
+                    <div className="px-4 py-3 bg-slate-50/70">{renderExpandedRow(item)}</div>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          );
+        })
+      )}
+    </tbody>
         </table>
       </div>
 
