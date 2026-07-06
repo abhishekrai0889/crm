@@ -2,20 +2,58 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
+  // Navigation & Layout
   Dashboard as DashboardIcon,
-  People as PeopleIcon,
-  Business as BusinessIcon,
-  Settings as SettingsIcon,
-  Logout as LogoutIcon,
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
-  Assessment as AssessmentIcon,
-  Notifications as NotificationsIcon,
-  Person as PersonIcon,
   Close as CloseIcon,
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
-  Circle as CircleIcon,
+
+  // Business & People
+  People as PeopleIcon,
+  Business as BusinessIcon,
+  Person as PersonIcon,
+  Group as GroupIcon,
+
+  // Analytics & Charts
+  Assessment as AssessmentIcon,
+  Analytics as AnalyticsIcon,
+  BarChart as BarChartIcon,
+  TrendingUp as TrendingUpIcon,
+
+  // Notifications & Communication
+  Notifications as NotificationsIcon,
+  NotificationsActive as NotificationsActiveIcon,
+  Email as EmailIcon,
+
+  // Settings & Preferences
+  Settings as SettingsIcon,
+  SettingsSystemDaydream as SettingsSystemDaydreamIcon,
+  Security as SecurityIcon,
+  PrivacyTip as PrivacyTipIcon,
+
+  // Actions
+  Logout as LogoutIcon,
+  Add as AddIcon,
+
+  // Content & Media
+  Folder as FolderIcon,
+
+  // Calendar & Time
+  CalendarToday as CalendarTodayIcon,
+
+  // File & Documents
+  Assignment as AssignmentIcon,
+
+  // Alerts & Status
+  CheckCircle as CheckCircleIcon,
+
+  // Forms & Input
+  Search as SearchIcon,
+
+  // Support
+  Help as HelpIcon,
 } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -51,17 +89,20 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
           path: "/user/dashboard/partners/all",
           label: "All Partners",
           description: "View all partners",
+          icon: <GroupIcon />,
         },
         {
           path: "/user/dashboard/partners/add",
           label: "Add Partner",
           description: "Create new partner",
+          icon: <AddIcon />,
         },
         {
           path: "/user/dashboard/partners/approvals",
           label: "Approvals",
           description: "Pending approvals",
           badge: "5",
+          icon: <CheckCircleIcon />,
         },
       ],
     },
@@ -73,16 +114,59 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
     },
     {
       path: "/user/dashboard/analytics",
-      icon: <AssessmentIcon />,
+      icon: <AnalyticsIcon />,
       label: "Analytics",
       description: "View reports & insights",
+      children: [
+        {
+          path: "/user/dashboard/analytics/overview",
+          label: "Overview",
+          icon: <BarChartIcon />,
+        },
+        {
+          path: "/user/dashboard/analytics/reports",
+          label: "Reports",
+          icon: <AssessmentIcon />,
+        },
+        {
+          path: "/user/dashboard/analytics/trends",
+          label: "Trends",
+          icon: <TrendingUpIcon />,
+        },
+      ],
     },
     {
       path: "/user/dashboard/notifications",
-      icon: <NotificationsIcon />,
+      icon: <NotificationsActiveIcon />,
       label: "Notifications",
       description: "Recent updates",
       badge: "3",
+    },
+    {
+      path: "/user/dashboard/email",
+      icon: <EmailIcon />,
+      label: "Email",
+      description: "Communications",
+      badge: "12",
+    },
+    {
+      path: "/user/dashboard/calendar",
+      icon: <CalendarTodayIcon />,
+      label: "Calendar",
+      description: "Events & meetings",
+    },
+    {
+      path: "/user/dashboard/tasks",
+      icon: <AssignmentIcon />,
+      label: "Tasks",
+      description: "Manage tasks",
+      badge: "8",
+    },
+    {
+      path: "/user/dashboard/files",
+      icon: <FolderIcon />,
+      label: "Files",
+      description: "Documents & files",
     },
     {
       path: "/user/dashboard/profile",
@@ -95,6 +179,23 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
       icon: <SettingsIcon />,
       label: "Settings",
       description: "System preferences",
+      children: [
+        {
+          path: "/user/dashboard/settings/general",
+          label: "General",
+          icon: <SettingsSystemDaydreamIcon />,
+        },
+        {
+          path: "/user/dashboard/settings/security",
+          label: "Security",
+          icon: <SecurityIcon />,
+        },
+        {
+          path: "/user/dashboard/settings/privacy",
+          label: "Privacy",
+          icon: <PrivacyTipIcon />,
+        },
+      ],
     },
   ];
 
@@ -116,7 +217,6 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
     }
   };
 
-  // Get initials for avatar
   const getInitials = (name) => {
     if (!name) return "U";
     return name
@@ -127,14 +227,9 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
       .slice(0, 2);
   };
 
-  // Get status color
-  const getStatusColor = () => {
-    return "bg-emerald-500";
-  };
-
   return (
     <>
-      {/* Mobile Overlay with blur */}
+      {/* Mobile Overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -204,7 +299,6 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
           </motion.div>
 
           <div className="flex items-center gap-1">
-            {/* Mobile close button */}
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -213,7 +307,6 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
             >
               <CloseIcon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 dark:text-slate-400" />
             </motion.button>
-            {/* Desktop toggle button */}
             <motion.button
               whileHover={{ scale: 1.1, rotate: isOpen ? 0 : 180 }}
               whileTap={{ scale: 0.9 }}
@@ -229,37 +322,7 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
           </div>
         </div>
 
-        {/* User Profile Section */}
-        {isOpen && user && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="px-4 py-4 border-b border-slate-200/50 dark:border-slate-700/50"
-          >
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 flex items-center justify-center text-white text-sm font-semibold shadow-lg shadow-blue-500/25">
-                  {getInitials(user.name)}
-                </div>
-                <div
-                  className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full ${getStatusColor()} border-2 border-white dark:border-slate-800`}
-                >
-                  <div
-                    className={`absolute inset-0 rounded-full ${getStatusColor()} animate-ping opacity-75`}
-                  ></div>
-                </div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">
-                  {user.name || "User"}
-                </p>
-                <p className="text-xs text-slate-400 dark:text-slate-500 truncate">
-                  {user.email || "user@example.com"}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        )}
+      
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
@@ -338,7 +401,14 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
                                   }
                                 `}
                               >
-                                <span>{child.label}</span>
+                                <span className="flex items-center gap-2">
+                                  {child.icon && (
+                                    <span className="text-slate-400">
+                                      {child.icon}
+                                    </span>
+                                  )}
+                                  {child.label}
+                                </span>
                                 {child.badge && (
                                   <span className="px-2 py-0.5 text-xs font-medium text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full">
                                     {child.badge}
@@ -442,7 +512,6 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
         </div>
       </motion.aside>
 
-      {/* Custom Scrollbar Styles */}
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
