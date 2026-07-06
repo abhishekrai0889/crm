@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
@@ -7,9 +7,22 @@ import Footer from "./Footer";
 const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setMobileSidebarOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <div className="flex h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/10 to-indigo-50/10">
       {/* Sidebar */}
       <Sidebar
         isOpen={sidebarOpen}
@@ -21,8 +34,10 @@ const MainLayout = () => {
       {/* Main Content */}
       <div
         className={`
-        flex-1 flex flex-col transition-all duration-300
-        ${sidebarOpen ? "lg:ml-64" : "lg:ml-16"}
+        transition-all duration-300
+        ${sidebarOpen && !isMobile ? "ml-[280px]" : ""}
+        ${!sidebarOpen && !isMobile ? "ml-[72px]" : ""}
+        ${isMobile ? "ml-0" : ""}
       `}
       >
         {/* Header */}
@@ -30,11 +45,14 @@ const MainLayout = () => {
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
           setMobileSidebarOpen={setMobileSidebarOpen}
+          isMobile={isMobile}
         />
 
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          <Outlet />
+        {/* Page Content */}
+        <main className="p-4 md:p-6 lg:p-8">
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
         </main>
 
         {/* Footer */}
