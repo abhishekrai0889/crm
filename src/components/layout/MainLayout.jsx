@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Footer from "./Footer";
+import { NotificationProvider } from "../../context/NotificationContext";
 
 const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -22,9 +25,10 @@ const MainLayout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/10 to-indigo-50/10">
-      {/* Sidebar */}
-      <Sidebar
+    <NotificationProvider>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/10 to-indigo-50/10">
+        {/* Sidebar */}
+        <Sidebar
         isOpen={sidebarOpen}
         setIsOpen={setSidebarOpen}
         mobileOpen={mobileSidebarOpen}
@@ -58,7 +62,10 @@ const MainLayout = () => {
         {/* Footer */}
         <Footer />
       </div>
+
+      <ToastContainer position="bottom-right" autoClose={2500} />
     </div>
+    </NotificationProvider>
   );
 };
 

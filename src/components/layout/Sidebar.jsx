@@ -1,67 +1,59 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useNotifications } from "../../context/NotificationContext";
 import {
-  // Navigation & Layout
+  // Navigation & layout
   Dashboard as DashboardIcon,
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   Close as CloseIcon,
   ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon,
 
-  // Business & People
-  People as PeopleIcon,
-  Business as BusinessIcon,
+  // CRM
   Person as PersonIcon,
-  Group as GroupIcon,
+  Business as BusinessIcon,
+  Assignment as AssignmentIcon,
+  CalendarToday as CalendarTodayIcon,
+  Folder as FolderIcon,
 
-  // Analytics & Charts
-  Assessment as AssessmentIcon,
+  // Manage
+  People as PeopleIcon,
+  Group as GroupIcon,
+  Add as AddIcon,
+  CheckCircle as CheckCircleIcon,
   Analytics as AnalyticsIcon,
   BarChart as BarChartIcon,
+  Assessment as AssessmentIcon,
   TrendingUp as TrendingUpIcon,
-
-  // Notifications & Communication
-  Notifications as NotificationsIcon,
-  NotificationsActive as NotificationsActiveIcon,
   Email as EmailIcon,
+  NotificationsActive as NotificationsActiveIcon,
 
-  // Settings & Preferences
+  // Admin
   Settings as SettingsIcon,
-  SettingsSystemDaydream as SettingsSystemDaydreamIcon,
   Security as SecurityIcon,
   PrivacyTip as PrivacyTipIcon,
+  SettingsSystemDaydream as SettingsSystemDaydreamIcon,
 
   // Actions
   Logout as LogoutIcon,
-  Add as AddIcon,
-
-  // Content & Media
-  Folder as FolderIcon,
-
-  // Calendar & Time
-  CalendarToday as CalendarTodayIcon,
-
-  // File & Documents
-  Assignment as AssignmentIcon,
-
-  // Alerts & Status
-  CheckCircle as CheckCircleIcon,
-
-  // Forms & Input
-  Search as SearchIcon,
-
-  // Support
-  Help as HelpIcon,
 } from "@mui/icons-material";
+import FlashOnIcon from "@mui/icons-material/FlashOn";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
+import CampaignIcon from "@mui/icons-material/Campaign";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
+import GroupsIcon from "@mui/icons-material/Groups";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const { unreadCount } = useNotifications();
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState({});
-  const [hoveredItem, setHoveredItem] = useState(null);
+  const location = useLocation();
+  const [expandedGroup, setExpandedGroup] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
   useEffect(() => {
@@ -72,143 +64,252 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const menuItems = [
+  // Grouped menu: single items navigate directly; items with children
+  // expand as an accordion (only one group open at a time) so the
+  // sidebar never becomes a long scroll.
+  const sections = [
     {
-      path: "/user/dashboard",
-      icon: <DashboardIcon />,
-      label: "Dashboard",
-      description: "Overview & Analytics",
-    },
-    {
-      path: "/user/dashboard/partners",
-      icon: <PeopleIcon />,
-      label: "Partners",
-      description: "Manage partners",
-      children: [
+      label: null,
+      items: [
         {
-          path: "/user/dashboard/partners/all",
-          label: "All Partners",
-          description: "View all partners",
-          icon: <GroupIcon />,
+          path: "/user/dashboard",
+          end: true,
+          icon: <DashboardIcon />,
+          label: "Dashboard",
         },
         {
-          path: "/user/dashboard/partners/add",
-          label: "Add Partner",
-          description: "Create new partner",
-          icon: <AddIcon />,
+          path: "/user/dashboard/notifications",
+          icon: <NotificationsActiveIcon />,
+          label: "Notifications",
+          badge: unreadCount > 0 ? String(unreadCount) : null,
         },
         {
-          path: "/user/dashboard/partners/approvals",
-          label: "Approvals",
-          description: "Pending approvals",
-          badge: "5",
-          icon: <CheckCircleIcon />,
+          path: "/user/dashboard/email",
+          icon: <EmailIcon />,
+          label: "Email",
+          badge: "12",
         },
       ],
     },
     {
-      path: "/user/dashboard/organizations",
-      icon: <BusinessIcon />,
-      label: "Organizations",
-      description: "Manage organizations",
-    },
-    {
-      path: "/user/dashboard/analytics",
-      icon: <AnalyticsIcon />,
-      label: "Analytics",
-      description: "View reports & insights",
-      children: [
+      label: "CRM",
+      items: [
         {
-          path: "/user/dashboard/analytics/overview",
-          label: "Overview",
-          icon: <BarChartIcon />,
+          key: "sales",
+          icon: <ShowChartIcon />,
+          label: "Sales",
+          children: [
+            {
+              path: "/user/dashboard/leads",
+              label: "Leads",
+              icon: <FlashOnIcon />,
+            },
+            {
+              path: "/user/dashboard/contacts",
+              label: "Contacts",
+              icon: <PersonIcon />,
+            },
+            {
+              path: "/user/dashboard/companies",
+              label: "Companies",
+              icon: <BusinessIcon />,
+            },
+            {
+              path: "/user/dashboard/deals",
+              label: "Deals",
+              icon: <TrendingUpIcon />,
+            },
+          ],
         },
         {
-          path: "/user/dashboard/analytics/reports",
-          label: "Reports",
-          icon: <AssessmentIcon />,
+          key: "marketing",
+          icon: <CampaignIcon />,
+          label: "Marketing",
+          children: [
+            {
+              path: "/user/dashboard/campaigns",
+              label: "Campaigns",
+              icon: <CampaignIcon />,
+            },
+            {
+              path: "/user/dashboard/forms",
+              label: "Forms & Lists",
+              icon: <ListAltIcon />,
+            },
+          ],
         },
         {
-          path: "/user/dashboard/analytics/trends",
-          label: "Trends",
-          icon: <TrendingUpIcon />,
+          key: "support",
+          icon: <SupportAgentIcon />,
+          label: "Support",
+          children: [
+            {
+              path: "/user/dashboard/tickets",
+              label: "Tickets",
+              icon: <SupportAgentIcon />,
+              badge: "9",
+            },
+            {
+              path: "/user/dashboard/knowledge-base",
+              label: "Knowledge Base",
+              icon: <MenuBookIcon />,
+            },
+          ],
+        },
+        {
+          key: "projects",
+          icon: <ViewKanbanIcon />,
+          label: "Projects",
+          children: [
+            {
+              path: "/user/dashboard/projects",
+              label: "Projects",
+              icon: <ViewKanbanIcon />,
+            },
+            {
+              path: "/user/dashboard/tasks",
+              label: "Tasks",
+              icon: <AssignmentIcon />,
+              badge: "8",
+            },
+            {
+              path: "/user/dashboard/calendar",
+              label: "Calendar",
+              icon: <CalendarTodayIcon />,
+            },
+            {
+              path: "/user/dashboard/files",
+              label: "Files",
+              icon: <FolderIcon />,
+            },
+          ],
         },
       ],
     },
     {
-      path: "/user/dashboard/notifications",
-      icon: <NotificationsActiveIcon />,
-      label: "Notifications",
-      description: "Recent updates",
-      badge: "3",
-    },
-    {
-      path: "/user/dashboard/email",
-      icon: <EmailIcon />,
-      label: "Email",
-      description: "Communications",
-      badge: "12",
-    },
-    {
-      path: "/user/dashboard/calendar",
-      icon: <CalendarTodayIcon />,
-      label: "Calendar",
-      description: "Events & meetings",
-    },
-    {
-      path: "/user/dashboard/tasks",
-      icon: <AssignmentIcon />,
-      label: "Tasks",
-      description: "Manage tasks",
-      badge: "8",
-    },
-    {
-      path: "/user/dashboard/files",
-      icon: <FolderIcon />,
-      label: "Files",
-      description: "Documents & files",
-    },
-    {
-      path: "/user/dashboard/profile",
-      icon: <PersonIcon />,
-      label: "Profile",
-      description: "Account settings",
-    },
-    {
-      path: "/user/dashboard/settings",
-      icon: <SettingsIcon />,
-      label: "Settings",
-      description: "System preferences",
-      children: [
+      label: "Manage",
+      items: [
         {
-          path: "/user/dashboard/settings/general",
-          label: "General",
-          icon: <SettingsSystemDaydreamIcon />,
+          key: "partners",
+          icon: <PeopleIcon />,
+          label: "Partners",
+          children: [
+            {
+              path: "/user/dashboard/partners/all",
+              label: "All Partners",
+              icon: <GroupIcon />,
+            },
+            {
+              path: "/user/dashboard/partners/add",
+              label: "Add Partner",
+              icon: <AddIcon />,
+            },
+            {
+              path: "/user/dashboard/partners/approvals",
+              label: "Approvals",
+              icon: <CheckCircleIcon />,
+              badge: "5",
+            },
+          ],
         },
         {
-          path: "/user/dashboard/settings/security",
-          label: "Security",
-          icon: <SecurityIcon />,
+          path: "/user/dashboard/organizations",
+          icon: <BusinessIcon />,
+          label: "Organizations",
         },
         {
-          path: "/user/dashboard/settings/privacy",
-          label: "Privacy",
-          icon: <PrivacyTipIcon />,
+          key: "analytics",
+          icon: <AnalyticsIcon />,
+          label: "Analytics",
+          children: [
+            {
+              path: "/user/dashboard/analytics/overview",
+              label: "Overview",
+              icon: <BarChartIcon />,
+            },
+            {
+              path: "/user/dashboard/analytics/reports",
+              label: "Reports",
+              icon: <AssessmentIcon />,
+            },
+            {
+              path: "/user/dashboard/analytics/trends",
+              label: "Trends",
+              icon: <TrendingUpIcon />,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Admin",
+      items: [
+        {
+          path: "/user/dashboard/team",
+          icon: <GroupsIcon />,
+          label: "Team",
+        },
+        {
+          key: "settings",
+          icon: <SettingsIcon />,
+          label: "Settings",
+          children: [
+            {
+              path: "/user/dashboard/settings/general",
+              label: "General",
+              icon: <SettingsSystemDaydreamIcon />,
+            },
+            {
+              path: "/user/dashboard/settings/security",
+              label: "Security",
+              icon: <SecurityIcon />,
+            },
+            {
+              path: "/user/dashboard/settings/privacy",
+              label: "Privacy",
+              icon: <PrivacyTipIcon />,
+            },
+            {
+              path: "/user/dashboard/profile",
+              label: "My Profile",
+              icon: <PersonIcon />,
+            },
+          ],
         },
       ],
     },
   ];
+
+  // Auto-expand the group that contains the active route.
+  useEffect(() => {
+    for (const section of sections) {
+      for (const item of section.items) {
+        if (
+          item.children?.some((child) =>
+            location.pathname.startsWith(child.path),
+          )
+        ) {
+          setExpandedGroup(item.key);
+          return;
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   const handleLogout = async () => {
     await logout();
     navigate("/signin", { replace: true });
   };
 
-  const toggleExpand = (path) => {
-    setExpanded((prev) => ({
-      ...prev,
-      [path]: !prev[path],
-    }));
+  const toggleGroup = (key) => {
+    // Expand the rail first if it's collapsed, so children are visible.
+    if (!isOpen && !isMobile) {
+      setIsOpen(true);
+      setExpandedGroup(key);
+      return;
+    }
+    setExpandedGroup((prev) => (prev === key ? null : key));
   };
 
   const handleNavClick = () => {
@@ -217,15 +318,14 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
     }
   };
 
-  const getInitials = (name) => {
-    if (!name) return "U";
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
+  const isGroupActive = (item) =>
+    item.children?.some((child) => location.pathname.startsWith(child.path));
+
+  const badgePill = (badge) => (
+    <span className="px-2 py-0.5 text-xs font-medium text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full shadow-lg shadow-red-500/25">
+      {badge}
+    </span>
+  );
 
   return (
     <>
@@ -256,8 +356,8 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
           backdrop-blur-xl
           border-r border-slate-200/50 dark:border-slate-700/50
           shadow-2xl shadow-slate-200/20 dark:shadow-slate-900/20
-          flex flex-col
-          ${mobileOpen ? "block" : "hidden lg:block"}
+          flex-col
+          ${mobileOpen ? "flex" : "hidden lg:flex"}
         `}
         style={{
           width: isOpen ? 280 : 72,
@@ -322,163 +422,161 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
           </div>
         </div>
 
-      
-
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3 custom-scrollbar">
-          <ul className="space-y-1">
-            {menuItems.map((item, index) => (
-              <motion.li
-                key={item.path}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                onMouseEnter={() => setHoveredItem(item.path)}
-                onMouseLeave={() => setHoveredItem(null)}
-              >
-                {item.children ? (
-                  <div>
-                    <motion.button
-                      whileHover={{ x: isOpen ? 4 : 0 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => toggleExpand(item.path)}
-                      className={`
-                        w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
-                        transition-all duration-200
-                        hover:bg-gradient-to-r hover:from-blue-50/80 hover:to-indigo-50/80
-                        dark:hover:from-slate-700/50 dark:hover:to-slate-700/30
-                        ${isOpen ? "justify-start" : "justify-center"}
-                        ${hoveredItem === item.path ? "text-blue-600 dark:text-blue-400" : "text-slate-600 dark:text-slate-400"}
-                      `}
-                      title={!isOpen ? item.label : ""}
-                    >
-                      <span
-                        className={`transition-colors duration-200 ${hoveredItem === item.path ? "text-blue-600 dark:text-blue-400" : "text-slate-500 dark:text-slate-500"}`}
-                      >
-                        {item.icon}
-                      </span>
-                      {isOpen && (
-                        <>
-                          <span className="flex-1 text-sm font-medium text-left">
-                            {item.label}
-                          </span>
-                          <span className="text-xs text-slate-400">
-                            {expanded[item.path] ? (
-                              <ExpandLessIcon />
-                            ) : (
-                              <ExpandMoreIcon />
-                            )}
-                          </span>
-                        </>
-                      )}
-                    </motion.button>
-                    <AnimatePresence>
-                      {isOpen && expanded[item.path] && (
-                        <motion.ul
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="ml-4 mt-1 space-y-1 overflow-hidden"
+        <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-3 custom-scrollbar">
+          {sections.map((section, sectionIndex) => (
+            <div key={section.label || sectionIndex}>
+              {section.label && isOpen && (
+                <p className="px-3 pt-4 pb-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400 dark:text-slate-500">
+                  {section.label}
+                </p>
+              )}
+              {section.label && !isOpen && (
+                <div className="my-3 mx-2 border-t border-slate-200/70 dark:border-slate-700/70" />
+              )}
+              <ul className="space-y-0.5">
+                {section.items.map((item) => (
+                  <li key={item.key || item.path}>
+                    {item.children ? (
+                      <div>
+                        <motion.button
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => toggleGroup(item.key)}
+                          className={`
+                            w-full flex items-center gap-3 px-3 py-2.5 rounded-xl
+                            transition-all duration-200
+                            ${
+                              isGroupActive(item)
+                                ? "text-blue-600 dark:text-blue-400 bg-blue-50/60 dark:bg-slate-700/40 font-medium"
+                                : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"
+                            }
+                            ${isOpen ? "justify-start" : "justify-center"}
+                          `}
+                          title={!isOpen ? item.label : ""}
                         >
-                          {item.children.map((child, idx) => (
-                            <motion.li
-                              key={child.path}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: idx * 0.05 }}
-                            >
-                              <NavLink
-                                to={child.path}
-                                onClick={handleNavClick}
-                                className={({ isActive }) => `
-                                  flex items-center justify-between px-3 py-2 rounded-lg text-sm
-                                  transition-all duration-200
-                                  ${
-                                    isActive
-                                      ? "bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400 font-medium"
-                                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"
-                                  }
-                                `}
-                              >
-                                <span className="flex items-center gap-2">
-                                  {child.icon && (
-                                    <span className="text-slate-400">
-                                      {child.icon}
-                                    </span>
-                                  )}
-                                  {child.label}
-                                </span>
-                                {child.badge && (
-                                  <span className="px-2 py-0.5 text-xs font-medium text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full">
-                                    {child.badge}
-                                  </span>
-                                )}
-                              </NavLink>
-                            </motion.li>
-                          ))}
-                        </motion.ul>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <NavLink
-                    to={item.path}
-                    onClick={handleNavClick}
-                    className={({ isActive }) => `
-                      flex items-center gap-3 px-3 py-2.5 rounded-xl
-                      transition-all duration-200
-                      ${
-                        isActive
-                          ? "bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400 font-medium shadow-sm"
-                          : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"
-                      }
-                      ${isOpen ? "justify-start" : "justify-center"}
-                      relative
-                    `}
-                    title={!isOpen ? item.label : ""}
-                  >
-                    {({ isActive }) => (
-                      <>
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeIndicator"
-                            className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-r-full"
-                          />
-                        )}
-                        <span
-                          className={`transition-colors duration-200 ${isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-500 dark:text-slate-500"}`}
-                        >
-                          {item.icon}
-                        </span>
-                        {isOpen && (
-                          <>
-                            <span className="flex-1 text-sm font-medium">
-                              {item.label}
-                            </span>
-                            {item.badge && (
+                          <span
+                            className={
+                              isGroupActive(item)
+                                ? "text-blue-600 dark:text-blue-400"
+                                : "text-slate-500 dark:text-slate-500"
+                            }
+                          >
+                            {item.icon}
+                          </span>
+                          {isOpen && (
+                            <>
+                              <span className="flex-1 text-sm font-medium text-left">
+                                {item.label}
+                              </span>
                               <motion.span
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="px-2 py-0.5 text-xs font-medium text-white bg-gradient-to-r from-red-500 to-pink-500 rounded-full shadow-lg shadow-red-500/25"
+                                animate={{
+                                  rotate: expandedGroup === item.key ? 180 : 0,
+                                }}
+                                transition={{ duration: 0.2 }}
+                                className="text-slate-400 flex items-center"
                               >
-                                {item.badge}
+                                <ExpandMoreIcon sx={{ fontSize: 18 }} />
                               </motion.span>
+                            </>
+                          )}
+                        </motion.button>
+                        <AnimatePresence>
+                          {isOpen && expandedGroup === item.key && (
+                            <motion.ul
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25 }}
+                              className="mt-0.5 space-y-0.5 overflow-hidden border-l border-slate-200 dark:border-slate-700 ml-[21px] pl-2"
+                            >
+                              {item.children.map((child) => (
+                                <li key={child.path}>
+                                  <NavLink
+                                    to={child.path}
+                                    onClick={handleNavClick}
+                                    className={({ isActive }) => `
+                                      flex items-center justify-between px-3 py-2 rounded-lg text-sm
+                                      transition-all duration-200
+                                      ${
+                                        isActive
+                                          ? "bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400 font-medium"
+                                          : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"
+                                      }
+                                    `}
+                                  >
+                                    <span className="flex items-center gap-2.5">
+                                      {child.icon && (
+                                        <span className="text-slate-400 flex items-center [&>svg]:!text-[17px]">
+                                          {child.icon}
+                                        </span>
+                                      )}
+                                      {child.label}
+                                    </span>
+                                    {child.badge && badgePill(child.badge)}
+                                  </NavLink>
+                                </li>
+                              ))}
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <NavLink
+                        to={item.path}
+                        end={item.end}
+                        onClick={handleNavClick}
+                        className={({ isActive }) => `
+                          flex items-center gap-3 px-3 py-2.5 rounded-xl
+                          transition-all duration-200
+                          ${
+                            isActive
+                              ? "bg-gradient-to-r from-blue-500/10 to-indigo-500/10 text-blue-600 dark:text-blue-400 font-medium shadow-sm"
+                              : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700/50"
+                          }
+                          ${isOpen ? "justify-start" : "justify-center"}
+                          relative
+                        `}
+                        title={!isOpen ? item.label : ""}
+                      >
+                        {({ isActive }) => (
+                          <>
+                            {isActive && (
+                              <motion.div
+                                layoutId="activeIndicator"
+                                className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-blue-500 to-indigo-500 rounded-r-full"
+                              />
+                            )}
+                            <span
+                              className={
+                                isActive
+                                  ? "text-blue-600 dark:text-blue-400"
+                                  : "text-slate-500 dark:text-slate-500"
+                              }
+                            >
+                              {item.icon}
+                            </span>
+                            {isOpen && (
+                              <>
+                                <span className="flex-1 text-sm font-medium">
+                                  {item.label}
+                                </span>
+                                {item.badge && badgePill(item.badge)}
+                              </>
+                            )}
+                            {!isOpen && item.badge && (
+                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-pink-500 rounded-full text-[8px] font-bold text-white flex items-center justify-center shadow-lg shadow-red-500/25">
+                                {item.badge}
+                              </div>
                             )}
                           </>
                         )}
-                        {!isOpen && item.badge && (
-                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-pink-500 rounded-full text-[8px] font-bold text-white flex items-center justify-center shadow-lg shadow-red-500/25">
-                            {item.badge}
-                          </div>
-                        )}
-                      </>
+                      </NavLink>
                     )}
-                  </NavLink>
-                )}
-              </motion.li>
-            ))}
-          </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </nav>
 
         {/* Logout Button */}
@@ -512,7 +610,7 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
         </div>
       </motion.aside>
 
-      <style jsx>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
         }

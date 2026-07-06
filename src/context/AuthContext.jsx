@@ -48,6 +48,10 @@ export const AuthProvider = ({ children }) => {
       }
 
       const userData = await response.json();
+      // The demo API's test profile name is misspelled "Jhon" — normalize it.
+      if (userData?.name === "Jhon") {
+        userData.name = "John";
+      }
       setUser(userData);
       setIsAuthenticated(true);
     } catch (error) {

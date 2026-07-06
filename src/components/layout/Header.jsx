@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNotifications } from "../../context/NotificationContext";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Menu as MenuIcon,
   Search as SearchIcon,
@@ -21,7 +22,10 @@ const Header = ({
   isMobile,
 }) => {
   const { user, logout } = useAuth();
+  const { notifications, unreadCount, markRead, markAllRead } =
+    useNotifications();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -41,24 +45,25 @@ const Header = ({
       .slice(0, 2);
   };
 
-  const notifications = [
-    { id: 1, title: "New partner application", time: "2 min ago", read: false },
-    {
-      id: 2,
-      title: "Anshuman Singh approved",
-      time: "1 hour ago",
-      read: false,
-    },
-    { id: 3, title: "System maintenance", time: "3 hours ago", read: true },
-    {
-      id: 4,
-      title: "New message from Support",
-      time: "5 hours ago",
-      read: true,
-    },
-  ];
+  const handleNotificationClick = (notification) => {
+    markRead(notification.id);
+    setShowNotifications(false);
+    navigate(`/user/dashboard/notifications/${notification.id}`);
+  };
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const handleViewAllNotifications = () => {
+    setShowNotifications(false);
+    navigate("/user/dashboard/notifications");
+  };
+
+  // Breadcrumb label derived from the current route segment
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const currentSection = pathSegments[2]
+    ? pathSegments[2]
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ")
+    : "Dashboard";
 
   return (
     <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-sm">
@@ -73,18 +78,12 @@ const Header = ({
             <MenuIcon className="w-5 h-5 text-slate-600" />
           </button>
 
-          {/* Desktop toggle button */}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="hidden lg:flex p-2 rounded-xl hover:bg-slate-100 transition-all duration-200"
-          >
-            <MenuIcon className="w-5 h-5 text-slate-600" />
-          </button>
-
           {/* Breadcrumb */}
           <div className="hidden md:flex items-center gap-2 text-sm">
             <span className="text-slate-400">/</span>
-            <span className="text-slate-600 font-medium">Dashboard</span>
+            <span className="text-slate-600 font-medium">
+              {currentSection}
+            </span>
           </div>
         </div>
 
@@ -138,14 +137,18 @@ const Header = ({
                     <h3 className="text-sm font-semibold text-slate-700">
                       Notifications
                     </h3>
-                    <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+                    <button
+                      onClick={markAllRead}
+                      className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                    >
                       Mark all read
                     </button>
                   </div>
                   <div className="max-h-80 overflow-y-auto">
-                    {notifications.map((notification) => (
+                    {notifications.slice(0, 5).map((notification) => (
                       <div
                         key={notification.id}
+                        onClick={() => handleNotificationClick(notification)}
                         className={`px-4 py-3 hover:bg-slate-50 transition-colors cursor-pointer ${
                           !notification.read ? "bg-blue-50/30" : ""
                         }`}
@@ -167,7 +170,10 @@ const Header = ({
                     ))}
                   </div>
                   <div className="px-4 py-2 border-t border-slate-200">
-                    <button className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium">
+                    <button
+                      onClick={handleViewAllNotifications}
+                      className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    >
                       View all notifications
                     </button>
                   </div>

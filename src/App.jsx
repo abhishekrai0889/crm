@@ -20,6 +20,9 @@ import Contact from "./pages/Contact";
 
 // Protected Pages
 import Dashboard from "./pages/Dashboard";
+import Notifications from "./pages/Notifications";
+import Team from "./pages/Team";
+import ComingSoon from "./pages/ComingSoon";
 import BasicTable from "../src/ui/Example/BasicTable";
 // import Partners from "./pages/Partners";
 // import Organizations from "./pages/Organizations";
@@ -173,8 +176,12 @@ function App() {
           }
         >
           <Route index element={<Dashboard />} />
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="notifications/:id" element={<Notifications />} />
+          <Route path="team" element={<Team />} />
           <Route path="organizations" element={<BasicTable />} />
-          {/* <Route path="/terms-of-service" element={<BasicTable />} /> */}
+          {/* Unbuilt sections land on an in-layout placeholder */}
+          <Route path="*" element={<ComingSoon />} />
           {/* Add more protected routes here */}
         </Route>
 
