@@ -27,6 +27,7 @@ import BasicTable from "../src/ui/Example/BasicTable";
 
 // Auth Provider
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import NotFoundPage from "./pages/NotFoundPage";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -46,6 +47,24 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/signin" replace />;
 };
 
+// Public Route Component - Redirect to dashboard if already logged in
+const PublicRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-slate-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return isAuthenticated ? <Navigate to="/user/dashboard" replace /> : children;
+};
+
 function App() {
   const location = useLocation();
 
@@ -56,17 +75,74 @@ function App() {
   return (
     <AuthProvider>
       <Routes>
-        {/* Public Routes - No Layout */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<Trial />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/* Public Auth Routes - No Layout (Redirect to dashboard if logged in) */}
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signin"
+          element={
+            <PublicRoute>
+              <SignIn />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Trial />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          }
+        />
 
-        {/* Public Routes - With Header/Footer */}
+        {/* Public Routes - With Header/Footer (Redirect to dashboard if logged in) */}
         <Route element={<AuthLayout hideLayout={hideLayout} />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route
+            path="/"
+            element={
+              <PublicRoute>
+                <Home />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/pricing"
+            element={
+              <PublicRoute>
+                <Pricing />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <PublicRoute>
+                <Contact />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/table"
+            element={
+              <PublicRoute>
+                <BasicTable />
+              </PublicRoute>
+            }
+          />
         </Route>
 
         {/* Protected Routes - With Sidebar Layout */}
@@ -79,19 +155,11 @@ function App() {
           }
         >
           <Route index element={<Dashboard />} />
-          {/* <Route path="partners" element={<Partners />} />
-          <Route path="partners/all" element={<Partners />} />
-          <Route path="partners/add" element={<Partners />} />
-          <Route path="partners/approvals" element={<Partners />} />
-          <Route path="organizations" element={<Organizations />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="settings" element={<Settings />} /> */}
-          <Route path="table" element={<BasicTable />} />
+          {/* Add more protected routes here */}
         </Route>
 
-        {/* Catch all - Redirect to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Catch all - 404 page */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AuthProvider>
   );

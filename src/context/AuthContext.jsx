@@ -1,4 +1,11 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+// context/AuthContext.jsx
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react";
 
 const AuthContext = createContext(null);
 
@@ -8,19 +15,19 @@ const API_URL = "https://api.escuelajs.co/api/v1";
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      fetchUser();
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  const fetchUser = async () => {
+  // Fetch user function
+  const fetchUser = useCallback(async () => {
     try {
       const token = localStorage.getItem("access_token");
+      if (!token) {
+        setUser(null);
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(`${API_URL}/auth/profile`, {
         method: "GET",
         headers: {
@@ -30,21 +37,45 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
+        // If token is invalid, clear it
+        if (response.status === 401) {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          setUser(null);
+          setIsAuthenticated(false);
+        }
         throw new Error("Failed to fetch user");
       }
 
       const userData = await response.json();
       setUser(userData);
+      setIsAuthenticated(true);
     } catch (error) {
       console.error("Failed to fetch user:", error);
-      logout();
+      setUser(null);
+      setIsAuthenticated(false);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
+  // Check authentication on mount
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      fetchUser();
+    } else {
+      setLoading(false);
+      setIsAuthenticated(false);
+      setUser(null);
+    }
+  }, [fetchUser]);
+
+  // Login function
   const login = async (email, password) => {
     try {
+      setLoading(true);
+
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: {
@@ -68,30 +99,39 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Fetch user profile
-      const userData = await fetchUser();
-      setUser(userData);
+      await fetchUser();
 
-      return { success: true, user: userData };
+      return { success: true };
     } catch (error) {
+      setUser(null);
+      setIsAuthenticated(false);
       return {
         success: false,
         error: error.message || "Login failed. Please try again.",
       };
+    } finally {
+      setLoading(false);
     }
   };
 
-  const logout = () => {
+  // Logout function
+  const logout = useCallback(() => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
+    localStorage.removeItem("user");
     setUser(null);
-  };
+    setIsAuthenticated(false);
+    setLoading(false);
+  }, []);
 
   const value = {
     user,
     loading,
     login,
     logout,
-    isAuthenticated: !!user && !!localStorage.getItem("access_token"),
+    isAuthenticated,
+    // Add a refresh function to manually refresh user state
+    refreshUser: fetchUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

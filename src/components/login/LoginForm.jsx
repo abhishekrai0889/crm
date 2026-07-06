@@ -1,20 +1,16 @@
 import TextInput from "../../ui/TextInput";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleIcon from "@mui/icons-material/Google";
-import MicrosoftIcon from "@mui/icons-material/Microsoft";
+import { useAuth } from "../../context/AuthContext";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-// API Service using Fetch
-const API_URL = "https://api.escuelajs.co/api/v1";
-
 const LoginForm = () => {
   const [formData, setFormData] = useState({
-    email: "john@mail.com", // Pre-filled for demo
-    password: "changeme", // Pre-filled for demo
+    email: "john@mail.com",
+    password: "changeme",
     rememberMe: false,
   });
 
@@ -24,10 +20,17 @@ const LoginForm = () => {
   const [submitError, setSubmitError] = useState("");
 
   const navigate = useNavigate();
+  const { login, isAuthenticated, loading } = useAuth();
 
-  // Create refs for form fields
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && !loading) {
+      navigate("/user/dashboard", { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -37,7 +40,6 @@ const LoginForm = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-    // Clear field-specific error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -45,7 +47,6 @@ const LoginForm = () => {
       }));
     }
 
-    // Clear submit error on any change
     if (submitError) {
       setSubmitError("");
     }
@@ -80,14 +81,12 @@ const LoginForm = () => {
     const errors = {};
     let isValid = true;
 
-    // Validate email
     const emailError = validateField("email", formData.email);
     if (emailError) {
       errors.email = emailError;
       isValid = false;
     }
 
-    // Validate password
     const passwordError = validateField("password", formData.password);
     if (passwordError) {
       errors.password = passwordError;
@@ -98,79 +97,15 @@ const LoginForm = () => {
     return { isValid, errors };
   };
 
-  // API Login function using fetch
-  const loginUser = async (email, password) => {
-    try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || "Invalid email or password");
-      }
-
-      const data = await response.json();
-
-      // Store tokens in localStorage
-      if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-      }
-      if (data.refresh_token) {
-        localStorage.setItem("refresh_token", data.refresh_token);
-      }
-
-      return { success: true, data };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.message || "Login failed. Please try again.",
-      };
-    }
-  };
-
-  // Get user profile after login
-  const getUserProfile = async () => {
-    try {
-      const token = localStorage.getItem("access_token");
-      const response = await fetch(`${API_URL}/auth/profile`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch user profile");
-      }
-
-      const userData = await response.json();
-      return { success: true, user: userData };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError("");
 
-    // Validate all fields
     const { isValid, errors: validationErrors } = validateAllFields();
 
     if (!isValid) {
       setIsSubmitting(false);
-
-      // Focus on the first field with an error
       const firstErrorField = Object.keys(validationErrors)[0];
       const refMap = {
         email: emailRef,
@@ -197,11 +132,10 @@ const LoginForm = () => {
     }
 
     try {
-      // Call login API
-      const loginResult = await loginUser(formData.email, formData.password);
+      const result = await login(formData.email, formData.password);
 
-      if (!loginResult.success) {
-        setSubmitError(loginResult.error);
+      if (!result.success) {
+        setSubmitError(result.error || "Invalid email or password");
         if (emailRef.current) {
           emailRef.current.focus();
         }
@@ -209,30 +143,13 @@ const LoginForm = () => {
         return;
       }
 
-      // Get user profile
-      const profileResult = await getUserProfile();
-
-      if (!profileResult.success) {
-        setSubmitError("Failed to fetch user profile");
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Store user info in localStorage if needed
-      if (profileResult.user) {
-        localStorage.setItem("user", JSON.stringify(profileResult.user));
-      }
-
-      console.log("Login successful!", profileResult.user);
-
-      // Redirect to dashboard
-      navigate("/user/dashboard", { replace: true });
+      // Login successful - useEffect will handle redirect
+      console.log("Login successful!");
     } catch (error) {
       setSubmitError(error.message || "Failed to sign in. Please try again.");
       if (emailRef.current) {
         emailRef.current.focus();
       }
-    } finally {
       setIsSubmitting(false);
     }
   };
@@ -241,6 +158,18 @@ const LoginForm = () => {
     console.log(`Signing in with ${provider}`);
     alert(`Signing in with ${provider}...`);
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-slate-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[var(--bg)] px-6 py-10">
