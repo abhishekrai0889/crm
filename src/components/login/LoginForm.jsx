@@ -330,7 +330,7 @@ const LoginForm = () => {
           <div className="my-8 flex items-center gap-4">
             <div className="h-px flex-1 bg-[var(--line)]"></div>
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--ink-300)]">
-              OR SIGN UP WITH
+              OR CONTINUE WITH
             </span>
             <div className="h-px flex-1 bg-[var(--line)]"></div>
           </div>

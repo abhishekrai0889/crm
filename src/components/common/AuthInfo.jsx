@@ -1,5 +1,6 @@
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import SectionBadge from "./SectionBadge";
+import { Link } from "react-router-dom";
 
 const AuthInfo = ({
   badge,
@@ -31,18 +32,39 @@ const AuthInfo = ({
 
       {/* Logo */}
 
-      <div className="relative z-10">
-        <div className="inline-flex items-center gap-3 rounded-xl border border-white/10 bg-white/10 px-4 py-2.5 backdrop-blur-xl">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#5B8DF5] to-[#2E6BEF] text-base font-bold">
-            E
-          </div>
+   <div className="relative z-10">
+  <Link to="/" className="inline-flex items-center gap-3">
+    <svg
+      className="h-10 w-10"
+      viewBox="0 0 40 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="heroLogoGradient" x1="0" y1="0" x2="40" y2="40">
+          <stop offset="0%" stopColor="#2E6BEF" />
+          <stop offset="100%" stopColor="#10399A" />
+        </linearGradient>
+      </defs>
 
-          <h2 className="text-[24px] font-bold tracking-tight">
-            ENTHIS
-          </h2>
-        </div>
-      </div>
+      <rect
+        width="40"
+        height="40"
+        rx="10"
+        fill="url(#heroLogoGradient)"
+      />
 
+      <path
+        d="M12 11h16v4H17v3h9v4h-9v3h11v4H12V11z"
+        fill="white"
+      />
+    </svg>
+
+    <h2 className="text-[30px] font-extrabold tracking-tight text-white">
+      ENTH<span className="text-[#5B8DF5]">IS</span>
+    </h2>
+  </Link>
+</div>
       {/* Content */}
 
       <div className="relative z-10 my-auto max-w-[430px]">

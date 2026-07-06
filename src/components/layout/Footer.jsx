@@ -6,7 +6,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-white border-t border-slate-200 px-4 md:px-6 py-3">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-sm text-slate-500">
+      {/* <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-sm text-slate-500">
         <p>© {currentYear} ENTHIS. All rights reserved.</p>
         <div className="flex items-center gap-4">
           <Link
@@ -25,7 +25,7 @@ const Footer = () => {
             Support
           </Link>
         </div>
-      </div>
+      </div> */}
     </footer>
   );
 };

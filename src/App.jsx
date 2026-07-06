@@ -10,6 +10,8 @@ import Login from "./pages/Login";
 import SignIn from "./pages/SignIn";
 import Trial from "./pages/Trial";
 import ForgotPassword from "./pages/ForgotPassword";
+import PrivacyPolicy from "./components/policy/PrivacyPolicy";
+import Terms from "./components/policy/Terms";
 
 // Public Pages
 import Home from "./pages/Home";
@@ -135,6 +137,22 @@ function App() {
               </PublicRoute>
             }
           />
+          <Route
+  path="/privacy-policy"
+  element={
+    <PublicRoute>
+      <PrivacyPolicy />
+    </PublicRoute>
+  }
+/>
+ <Route
+  path="/terms-of-service"
+  element={
+    <PublicRoute>
+      <Terms />
+    </PublicRoute>
+  }
+/>
           <Route
             path="/table"
             element={
