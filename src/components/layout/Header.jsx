@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  useNotifications,
+  notificationTypes,
+} from "../../context/NotificationContext";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Menu as MenuIcon,
   Search as SearchIcon,
@@ -21,10 +25,39 @@ const Header = ({
   isMobile,
 }) => {
   const { user, logout } = useAuth();
+  const { notifications, unreadCount, markRead, markAllRead } =
+    useNotifications();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const notificationsRef = useRef(null);
+  const profileMenuRef = useRef(null);
+
+  // Close dropdowns on outside click or Escape
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (notificationsRef.current && !notificationsRef.current.contains(e.target)) {
+        setShowNotifications(false);
+      }
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+    const handleEscape = (e) => {
+      if (e.key === "Escape") {
+        setShowNotifications(false);
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -41,24 +74,25 @@ const Header = ({
       .slice(0, 2);
   };
 
-  const notifications = [
-    { id: 1, title: "New partner application", time: "2 min ago", read: false },
-    {
-      id: 2,
-      title: "Anshuman Singh approved",
-      time: "1 hour ago",
-      read: false,
-    },
-    { id: 3, title: "System maintenance", time: "3 hours ago", read: true },
-    {
-      id: 4,
-      title: "New message from Support",
-      time: "5 hours ago",
-      read: true,
-    },
-  ];
+  const handleNotificationClick = (notification) => {
+    markRead(notification.id);
+    setShowNotifications(false);
+    navigate(`/user/dashboard/notifications/${notification.id}`);
+  };
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const handleViewAllNotifications = () => {
+    setShowNotifications(false);
+    navigate("/user/dashboard/notifications");
+  };
+
+  // Breadcrumb label derived from the current route segment
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const currentSection = pathSegments[2]
+    ? pathSegments[2]
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ")
+    : "Dashboard";
 
   return (
     <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-sm">
@@ -73,18 +107,12 @@ const Header = ({
             <MenuIcon className="w-5 h-5 text-slate-600" />
           </button>
 
-          {/* Desktop toggle button */}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="hidden lg:flex p-2 rounded-xl hover:bg-slate-100 transition-all duration-200"
-          >
-            <MenuIcon className="w-5 h-5 text-slate-600" />
-          </button>
-
           {/* Breadcrumb */}
           <div className="hidden md:flex items-center gap-2 text-sm">
             <span className="text-slate-400">/</span>
-            <span className="text-slate-600 font-medium">Dashboard</span>
+            <span className="text-slate-600 font-medium">
+              {currentSection}
+            </span>
           </div>
         </div>
 
@@ -114,7 +142,7 @@ const Header = ({
           </button>
 
           {/* Notifications */}
-          <div className="relative">
+          <div className="relative" ref={notificationsRef}>
             <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="p-2 rounded-xl hover:bg-slate-100 transition-all duration-200 relative"
@@ -134,40 +162,83 @@ const Header = ({
                   transition={{ duration: 0.2 }}
                   className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 z-50"
                 >
-                  <div className="px-4 py-2 border-b border-slate-200 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-700">
-                      Notifications
-                    </h3>
-                    <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">
-                      Mark all read
-                    </button>
-                  </div>
-                  <div className="max-h-80 overflow-y-auto">
-                    {notifications.map((notification) => (
-                      <div
-                        key={notification.id}
-                        className={`px-4 py-3 hover:bg-slate-50 transition-colors cursor-pointer ${
-                          !notification.read ? "bg-blue-50/30" : ""
-                        }`}
+                  <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-semibold text-slate-700">
+                        Notifications
+                      </h3>
+                      {unreadCount > 0 && (
+                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">
+                          {unreadCount} new
+                        </span>
+                      )}
+                    </div>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={markAllRead}
+                        className="text-xs text-blue-600 hover:text-blue-700 font-medium"
                       >
-                        <div className="flex items-start gap-3">
-                          <div
-                            className={`w-2 h-2 rounded-full mt-1.5 ${!notification.read ? "bg-blue-500" : "bg-slate-300"}`}
-                          ></div>
-                          <div className="flex-1">
-                            <p className="text-sm text-slate-700">
-                              {notification.title}
-                            </p>
-                            <p className="text-xs text-slate-400">
-                              {notification.time}
-                            </p>
-                          </div>
-                        </div>
+                        Mark all read
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+                    {notifications.length === 0 ? (
+                      <div className="px-4 py-10 text-center">
+                        <p className="text-sm font-medium text-slate-500">
+                          You're all caught up
+                        </p>
                       </div>
-                    ))}
+                    ) : (
+                      notifications.slice(0, 5).map((notification) => {
+                        const type =
+                          notificationTypes[notification.type] ||
+                          notificationTypes.system;
+                        const TypeIcon = type.icon;
+                        return (
+                          <div
+                            key={notification.id}
+                            onClick={() =>
+                              handleNotificationClick(notification)
+                            }
+                            className={`px-4 py-3 hover:bg-slate-50 transition-colors cursor-pointer ${
+                              !notification.read ? "bg-blue-50/40" : ""
+                            }`}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div
+                                className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${type.iconClasses}`}
+                              >
+                                <TypeIcon sx={{ fontSize: 16 }} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p
+                                  className={`text-sm truncate ${
+                                    notification.read
+                                      ? "text-slate-600"
+                                      : "font-semibold text-slate-800"
+                                  }`}
+                                >
+                                  {notification.title}
+                                </p>
+                                <p className="text-xs text-slate-400 mt-0.5">
+                                  {type.label} · {notification.time}
+                                </p>
+                              </div>
+                              {!notification.read && (
+                                <span className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
                   </div>
                   <div className="px-4 py-2 border-t border-slate-200">
-                    <button className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium">
+                    <button
+                      onClick={handleViewAllNotifications}
+                      className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium"
+                    >
                       View all notifications
                     </button>
                   </div>
@@ -177,7 +248,7 @@ const Header = ({
           </div>
 
           {/* Profile */}
-          <div className="relative">
+          <div className="relative" ref={profileMenuRef}>
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 transition-all duration-200"

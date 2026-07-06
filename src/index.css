@@ -33,15 +33,28 @@
 } */
 
 /* Optional: Highlight effect for errors */
-@keyframes highlightError {
-  0% {
-    background-color: rgba(239, 68, 68, 0.1);
-  }
-  100% {
-    background-color: transparent;
-  }
-}
+
 
 /* .highlight-error {
   animation: highlightError 1s ease-out;
 } */
+
+
+/* Add to your global CSS file */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Smooth scrollbar for toast container */
+::-webkit-scrollbar {
+  width: 0;
+}
