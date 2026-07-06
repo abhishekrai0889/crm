@@ -2,43 +2,90 @@
 // Shared notification state for the Header bell popup and the Notifications page.
 // Mock data only — swap the initial state for an API call later.
 import React, { createContext, useContext, useState, useCallback } from "react";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import FlashOnIcon from "@mui/icons-material/FlashOn";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import CampaignIcon from "@mui/icons-material/Campaign";
+import GroupsIcon from "@mui/icons-material/Groups";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 
 const NotificationContext = createContext(null);
+
+// Notification categories — shared by the header popup and the
+// Notifications page so icons and colors stay consistent.
+export const notificationTypes = {
+  deal: {
+    label: "Deal",
+    icon: TrendingUpIcon,
+    iconClasses: "bg-blue-100 text-blue-600",
+    badgeClasses: "bg-blue-50 text-blue-700 border-blue-200",
+  },
+  lead: {
+    label: "Lead",
+    icon: FlashOnIcon,
+    iconClasses: "bg-amber-100 text-amber-600",
+    badgeClasses: "bg-amber-50 text-amber-700 border-amber-200",
+  },
+  ticket: {
+    label: "Ticket",
+    icon: SupportAgentIcon,
+    iconClasses: "bg-rose-100 text-rose-600",
+    badgeClasses: "bg-rose-50 text-rose-700 border-rose-200",
+  },
+  campaign: {
+    label: "Campaign",
+    icon: CampaignIcon,
+    iconClasses: "bg-violet-100 text-violet-600",
+    badgeClasses: "bg-violet-50 text-violet-700 border-violet-200",
+  },
+  team: {
+    label: "Team",
+    icon: GroupsIcon,
+    iconClasses: "bg-emerald-100 text-emerald-600",
+    badgeClasses: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  },
+  system: {
+    label: "System",
+    icon: SettingsSuggestIcon,
+    iconClasses: "bg-slate-200 text-slate-600",
+    badgeClasses: "bg-slate-100 text-slate-600 border-slate-200",
+  },
+};
 
 const initialNotifications = [
   {
     id: 1,
-    title: "New partner application",
+    title: "Deal moved to Negotiation",
     message:
-      "Bluewave Solutions has submitted a partner application. Review their company profile, region coverage and submitted documents, then approve or reject the application from the Partners section.",
-    type: "partner",
+      "Priya Khanna moved 'Globex — Annual license' ($48,000) from Proposal to Negotiation. Expected close date is July 18 — review the updated terms before the pricing call.",
+    type: "deal",
     time: "2 min ago",
     read: false,
   },
   {
     id: 2,
-    title: "Anshuman Singh approved",
+    title: "New lead assigned to you",
     message:
-      "The partner application for Anshuman Singh was approved by Priya Khanna. An onboarding email with workspace access instructions has been sent to the partner.",
-    type: "approval",
+      "A new lead from the website form was assigned to you via round-robin: Initech (rahul@initech.com, UTM source: google/cpc). Qualify or disqualify it from the Leads screen.",
+    type: "lead",
     time: "1 hour ago",
     read: false,
   },
   {
     id: 3,
-    title: "System maintenance",
+    title: "Ticket #4821 resolved",
     message:
-      "Scheduled maintenance is planned for Sunday 02:00–04:00 IST. The dashboard will remain available in read-only mode during this window. No action is required.",
-    type: "system",
+      "Avneet Singh resolved ticket #4821 (login redirect loop). A CSAT survey has been sent to the customer. The ticket will auto-close in 48 hours unless the customer replies.",
+    type: "ticket",
     time: "3 hours ago",
     read: true,
   },
   {
     id: 4,
-    title: "New message from Support",
+    title: "Campaign sent successfully",
     message:
-      "Support replied to your ticket #4821 (login redirect loop): \"We've identified the cause and deployed a fix. Please confirm you can sign in normally so we can close the ticket.\"",
-    type: "message",
+      "'July product update' was delivered to 4,218 contacts (98.6% delivery rate). Early stats: 41% opens, 7.2% clicks. Full performance report is available under Marketing → Campaigns.",
+    type: "campaign",
     time: "5 hours ago",
     read: true,
   },
@@ -47,7 +94,7 @@ const initialNotifications = [
     title: "New team member joined",
     message:
       "Kabir Mehta accepted the workspace invitation and joined as User. You can adjust their role from Team management.",
-    type: "approval",
+    type: "team",
     time: "Yesterday",
     read: true,
   },
@@ -55,7 +102,7 @@ const initialNotifications = [
     id: 6,
     title: "Weekly summary is ready",
     message:
-      "Your weekly analytics summary is ready: 147 new leads, 23 deals won and 9 open tickets. Open Analytics to see the full report.",
+      "Your weekly summary is ready: 147 new leads, 23 deals won and 9 open tickets. Open Analytics to see the full report.",
     type: "system",
     time: "2 days ago",
     read: true,

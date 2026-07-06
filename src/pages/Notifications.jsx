@@ -4,42 +4,16 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle as CheckCircleIcon } from "@mui/icons-material";
-import HandshakeIcon from "@mui/icons-material/Handshake";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import MarkEmailUnreadIcon from "@mui/icons-material/MarkEmailUnread";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNotifications } from "../context/NotificationContext";
+import {
+  useNotifications,
+  notificationTypes,
+} from "../context/NotificationContext";
 
-const typeConfig = {
-  partner: {
-    label: "Partner",
-    icon: HandshakeIcon,
-    iconClasses: "bg-blue-100 text-blue-600",
-    badgeClasses: "bg-blue-50 text-blue-700 border-blue-200",
-  },
-  approval: {
-    label: "Approval",
-    icon: CheckCircleIcon,
-    iconClasses: "bg-emerald-100 text-emerald-600",
-    badgeClasses: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  },
-  system: {
-    label: "System",
-    icon: SettingsSuggestIcon,
-    iconClasses: "bg-amber-100 text-amber-600",
-    badgeClasses: "bg-amber-50 text-amber-700 border-amber-200",
-  },
-  message: {
-    label: "Message",
-    icon: ChatBubbleOutlineIcon,
-    iconClasses: "bg-purple-100 text-purple-600",
-    badgeClasses: "bg-purple-50 text-purple-700 border-purple-200",
-  },
-};
+const typeConfig = notificationTypes;
 
 const Notifications = () => {
   const { notifications, unreadCount, markRead, markUnread, markAllRead } =
