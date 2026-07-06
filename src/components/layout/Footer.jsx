@@ -35,27 +35,6 @@ const Footer = () => {
   ];
 
   return (
-<<<<<<< HEAD
-    <footer className="bg-white border-t border-slate-200 px-4 md:px-6 py-3">
-      {/* <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-sm text-slate-500">
-        <p>© {currentYear} ENTHIS. All rights reserved.</p>
-        <div className="flex items-center gap-4">
-          <Link
-            to="/privacy"
-            className="hover:text-slate-700 transition-colors"
-          >
-            Privacy Policy
-          </Link>
-          <Link to="/terms" className="hover:text-slate-700 transition-colors">
-            Terms of Service
-          </Link>
-          <Link
-            to="/contact"
-            className="hover:text-slate-700 transition-colors"
-          >
-            Support
-          </Link>
-=======
     <footer className="bg-white border-t border-slate-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Main Footer */}
@@ -126,9 +105,8 @@ const Footer = () => {
               Made with <HeartIcon className="w-4 h-4 text-red-500" /> by ENTHIS
             </span>
           </div>
->>>>>>> bfe01de584ad3ea47cac096815dc1ae7b0190d68
         </div>
-      </div> */}
+      </div> 
     </footer>
   );
 };
