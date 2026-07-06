@@ -323,7 +323,7 @@ const ContactForm = () => {
             icon={GroupsOutlinedIcon}
             error={formErrors.companySize}
             options={[
-              { label: "Select an option", value: "" },
+           
               { label: "1-10", value: "1-10" },
               { label: "11-50", value: "11-50" },
               { label: "51-200", value: "51-200" },
@@ -343,7 +343,7 @@ const ContactForm = () => {
           icon={HelpOutlineOutlinedIcon}
           error={formErrors.topic}
           options={[
-            { label: "Select an option", value: "" },
+           
             { label: "Sales", value: "sales" },
             { label: "Support", value: "support" },
             { label: "Demo", value: "demo" },
