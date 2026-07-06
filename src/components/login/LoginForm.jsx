@@ -8,10 +8,13 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
+// API Service using Fetch
+const API_URL = "https://api.escuelajs.co/api/v1";
+
 const LoginForm = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: "john@mail.com", // Pre-filled for demo
+    password: "changeme", // Pre-filled for demo
     rememberMe: false,
   });
 
@@ -95,6 +98,67 @@ const LoginForm = () => {
     return { isValid, errors };
   };
 
+  // API Login function using fetch
+  const loginUser = async (email, password) => {
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "Invalid email or password");
+      }
+
+      const data = await response.json();
+
+      // Store tokens in localStorage
+      if (data.access_token) {
+        localStorage.setItem("access_token", data.access_token);
+      }
+      if (data.refresh_token) {
+        localStorage.setItem("refresh_token", data.refresh_token);
+      }
+
+      return { success: true, data };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message || "Login failed. Please try again.",
+      };
+    }
+  };
+
+  // Get user profile after login
+  const getUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch(`${API_URL}/auth/profile`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user profile");
+      }
+
+      const userData = await response.json();
+      return { success: true, user: userData };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -115,14 +179,12 @@ const LoginForm = () => {
 
       const targetRef = refMap[firstErrorField];
       if (targetRef?.current) {
-        // Focus on the field and trigger validation
         targetRef.current.focus();
         if (targetRef.current.validate) {
           targetRef.current.validate();
         }
       }
 
-      // Scroll to the first error
       const errorElement = document.querySelector(`[id$="-error"]`);
       if (errorElement) {
         errorElement.scrollIntoView({
@@ -134,39 +196,39 @@ const LoginForm = () => {
       return;
     }
 
-    // Simulate API call
     try {
-      console.log("Login attempt:", {
-        email: formData.email,
-        password: formData.password,
-        rememberMe: formData.rememberMe,
-      });
+      // Call login API
+      const loginResult = await loginUser(formData.email, formData.password);
 
-      // Simulate API request
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          // Simulate successful login
-          if (
-            formData.email === "demo@company.com" &&
-            formData.password === "password123"
-          ) {
-            resolve({ success: true });
-          } else {
-            reject(new Error("Invalid email or password"));
-          }
-        }, 1500);
-      });
+      if (!loginResult.success) {
+        setSubmitError(loginResult.error);
+        if (emailRef.current) {
+          emailRef.current.focus();
+        }
+        setIsSubmitting(false);
+        return;
+      }
 
-      // Successful login
-      console.log("Login successful!");
+      // Get user profile
+      const profileResult = await getUserProfile();
 
-      // Redirect to dashboard or home page
-      navigate("/dashboard");
+      if (!profileResult.success) {
+        setSubmitError("Failed to fetch user profile");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Store user info in localStorage if needed
+      if (profileResult.user) {
+        localStorage.setItem("user", JSON.stringify(profileResult.user));
+      }
+
+      console.log("Login successful!", profileResult.user);
+
+      // Redirect to dashboard
+      navigate("/user/dashboard", { replace: true });
     } catch (error) {
-      // Handle login error
       setSubmitError(error.message || "Failed to sign in. Please try again.");
-
-      // Focus on email field for correction
       if (emailRef.current) {
         emailRef.current.focus();
       }
@@ -177,8 +239,6 @@ const LoginForm = () => {
 
   const handleSocialLogin = (provider) => {
     console.log(`Signing in with ${provider}`);
-    // Implement social login logic here
-    // For now, just show a message
     alert(`Signing in with ${provider}...`);
   };
 
