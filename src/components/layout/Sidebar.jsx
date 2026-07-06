@@ -14,26 +14,16 @@ import {
   Person as PersonIcon,
   Business as BusinessIcon,
   Assignment as AssignmentIcon,
-  CalendarToday as CalendarTodayIcon,
-  Folder as FolderIcon,
 
   // Manage
-  People as PeopleIcon,
-  Group as GroupIcon,
-  Add as AddIcon,
-  CheckCircle as CheckCircleIcon,
   Analytics as AnalyticsIcon,
   BarChart as BarChartIcon,
   Assessment as AssessmentIcon,
   TrendingUp as TrendingUpIcon,
-  Email as EmailIcon,
   NotificationsActive as NotificationsActiveIcon,
 
   // Admin
   Settings as SettingsIcon,
-  Security as SecurityIcon,
-  PrivacyTip as PrivacyTipIcon,
-  SettingsSystemDaydream as SettingsSystemDaydreamIcon,
 
   // Actions
   Logout as LogoutIcon,
@@ -46,6 +36,15 @@ import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
 import GroupsIcon from "@mui/icons-material/Groups";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import InsightsIcon from "@mui/icons-material/Insights";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import TuneIcon from "@mui/icons-material/Tune";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import WebhookIcon from "@mui/icons-material/Webhook";
+import ExtensionIcon from "@mui/icons-material/Extension";
+import HistoryIcon from "@mui/icons-material/History";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
@@ -84,10 +83,10 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
           badge: unreadCount > 0 ? String(unreadCount) : null,
         },
         {
-          path: "/user/dashboard/email",
-          icon: <EmailIcon />,
-          label: "Email",
-          badge: "12",
+          path: "/user/dashboard/activities",
+          icon: <PendingActionsIcon />,
+          label: "Activities",
+          badge: "6",
         },
       ],
     },
@@ -118,6 +117,11 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
               path: "/user/dashboard/deals",
               label: "Deals",
               icon: <TrendingUpIcon />,
+            },
+            {
+              path: "/user/dashboard/forecast",
+              label: "Forecast",
+              icon: <InsightsIcon />,
             },
           ],
         },
@@ -172,16 +176,6 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
               icon: <AssignmentIcon />,
               badge: "8",
             },
-            {
-              path: "/user/dashboard/calendar",
-              label: "Calendar",
-              icon: <CalendarTodayIcon />,
-            },
-            {
-              path: "/user/dashboard/files",
-              label: "Files",
-              icon: <FolderIcon />,
-            },
           ],
         },
       ],
@@ -189,29 +183,6 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
     {
       label: "Manage",
       items: [
-        {
-          key: "partners",
-          icon: <PeopleIcon />,
-          label: "Partners",
-          children: [
-            {
-              path: "/user/dashboard/partners/all",
-              label: "All Partners",
-              icon: <GroupIcon />,
-            },
-            {
-              path: "/user/dashboard/partners/add",
-              label: "Add Partner",
-              icon: <AddIcon />,
-            },
-            {
-              path: "/user/dashboard/partners/approvals",
-              label: "Approvals",
-              icon: <CheckCircleIcon />,
-              badge: "5",
-            },
-          ],
-        },
         {
           path: "/user/dashboard/organizations",
           icon: <BusinessIcon />,
@@ -255,24 +226,39 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
           label: "Settings",
           children: [
             {
-              path: "/user/dashboard/settings/general",
-              label: "General",
-              icon: <SettingsSystemDaydreamIcon />,
+              path: "/user/dashboard/settings/billing",
+              label: "Billing",
+              icon: <CreditCardIcon />,
             },
             {
-              path: "/user/dashboard/settings/security",
-              label: "Security",
-              icon: <SecurityIcon />,
+              path: "/user/dashboard/settings/custom-fields",
+              label: "Custom Fields",
+              icon: <TuneIcon />,
             },
             {
-              path: "/user/dashboard/settings/privacy",
-              label: "Privacy",
-              icon: <PrivacyTipIcon />,
+              path: "/user/dashboard/settings/workflows",
+              label: "Workflows",
+              icon: <AccountTreeIcon />,
             },
             {
-              path: "/user/dashboard/profile",
-              label: "My Profile",
-              icon: <PersonIcon />,
+              path: "/user/dashboard/settings/api-webhooks",
+              label: "API & Webhooks",
+              icon: <WebhookIcon />,
+            },
+            {
+              path: "/user/dashboard/settings/integrations",
+              label: "Integrations",
+              icon: <ExtensionIcon />,
+            },
+            {
+              path: "/user/dashboard/settings/audit-log",
+              label: "Audit Log",
+              icon: <HistoryIcon />,
+            },
+            {
+              path: "/user/dashboard/settings/data",
+              label: "Data",
+              icon: <ImportExportIcon />,
             },
           ],
         },
