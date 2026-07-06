@@ -227,7 +227,7 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
           children: [
             {
               path: "/user/dashboard/settings/billing",
-              label: "Billing",
+              label: "Plan & Billing",
               icon: <CreditCardIcon />,
             },
             {

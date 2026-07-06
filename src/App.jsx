@@ -23,6 +23,7 @@ import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
 import Notifications from "./pages/Notifications";
 import Team from "./pages/Team";
+import Billing from "./pages/Billing";
 import ComingSoon from "./pages/ComingSoon";
 import BasicTable from "../src/ui/Example/BasicTable";
 // import Partners from "./pages/Partners";
@@ -188,6 +189,7 @@ function App() {
           <Route path="notifications" element={<Notifications />} />
           <Route path="notifications/:id" element={<Notifications />} />
           <Route path="team" element={<Team />} />
+          <Route path="settings/billing" element={<Billing />} />
           <Route path="organizations" element={<BasicTable />} />
           {/* Unbuilt sections land on an in-layout placeholder */}
           <Route path="*" element={<ComingSoon />} />
