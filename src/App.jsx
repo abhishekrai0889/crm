@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import "./App.css";
-
+import { ToastProvider, useToast } from "./context/ToastContext";
+import { ToastContainer } from "./components/common/Toast";
 // Layout Components
 import MainLayout from "./components/layout/MainLayout";
 import AuthLayout from "./components/layout/AuthLayout";
@@ -33,6 +34,7 @@ import BasicTable from "../src/ui/Example/BasicTable";
 // Auth Provider
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import NotFoundPage from "./pages/NotFoundPage";
+import ToastDemo from "./ui/Example/ToastDemo";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -52,6 +54,11 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/signin" replace />;
 };
 
+// Toast Container Wrapper
+const ToastWrapper = () => {
+  const { toasts, removeToast } = useToast();
+  return <ToastContainer toasts={toasts} onRemove={removeToast} />;
+};
 // Public Route Component - Redirect to dashboard if already logged in
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -79,92 +86,94 @@ function App() {
 
   return (
     <AuthProvider>
-      <Routes>
-        {/* Public Auth Routes - No Layout (Redirect to dashboard if logged in) */}
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/signin"
-          element={
-            <PublicRoute>
-              <SignIn />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <PublicRoute>
-              <Trial />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <PublicRoute>
-              <ForgotPassword />
-            </PublicRoute>
-          }
-        />
+      <ToastProvider>
+        <ToastWrapper />
+        <Routes>
+          {/* Public Auth Routes - No Layout (Redirect to dashboard if logged in) */}
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/signin"
+            element={
+              <PublicRoute>
+                <SignIn />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <PublicRoute>
+                <Trial />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <PublicRoute>
+                <ForgotPassword />
+              </PublicRoute>
+            }
+          />
 
-        {/* Public Routes - With Header/Footer (Redirect to dashboard if logged in) */}
-        <Route element={<AuthLayout hideLayout={hideLayout} />}>
-          <Route
-            path="/"
-            element={
-              <PublicRoute>
-                <Home />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/pricing"
-            element={
-              <PublicRoute>
-                <Pricing />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <PublicRoute>
-                <Contact />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/privacy-policy"
-            element={
-              <PublicRoute>
-                <PrivacyPolicy />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/terms-of-service"
-            element={
-              <PublicRoute>
-                <Terms />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/table"
-            element={
-              <PublicRoute>
-                <BasicTable />
-              </PublicRoute>
-            }
-          />
-        </Route>
+          {/* Public Routes - With Header/Footer (Redirect to dashboard if logged in) */}
+          <Route element={<AuthLayout hideLayout={hideLayout} />}>
+            <Route
+              path="/"
+              element={
+                <PublicRoute>
+                  <Home />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/pricing"
+              element={
+                <PublicRoute>
+                  <Pricing />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <PublicRoute>
+                  <Contact />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/privacy-policy"
+              element={
+                <PublicRoute>
+                  <PrivacyPolicy />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/terms-of-service"
+              element={
+                <PublicRoute>
+                  <Terms />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/table"
+              element={
+                <PublicRoute>
+                  <BasicTable />
+                </PublicRoute>
+              }
+            />
+          </Route>
 
         {/* Protected Routes - With Sidebar Layout */}
         <Route
@@ -185,9 +194,10 @@ function App() {
           {/* Add more protected routes here */}
         </Route>
 
-        {/* Catch all - 404 page */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+          {/* Catch all - 404 page */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </ToastProvider>
     </AuthProvider>
   );
 }
