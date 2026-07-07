@@ -169,6 +169,7 @@ function App() {
             <Route path="notifications" element={<Notifications />} />
             <Route path="notifications/:id" element={<Notifications />} />
             <Route path="team" element={<Team />} />
+            <Route path="settings/billing" element={<Billing />} />
             <Route path="organizations" element={<BasicTable />} />
             {/* Unbuilt sections land on an in-layout placeholder */}
             <Route path="*" element={<ComingSoon />} />
