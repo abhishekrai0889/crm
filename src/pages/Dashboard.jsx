@@ -80,7 +80,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+   <div className="space-y-4 sm:space-y-6 min-h-full">
       {/* Welcome Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

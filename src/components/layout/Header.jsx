@@ -108,28 +108,95 @@ const Header = ({
           </button>
 
           {/* Breadcrumb */}
-          <div className="hidden md:flex items-center gap-2 text-sm">
-            <span className="text-slate-400">/</span>
-            <span className="text-slate-600 font-medium">
-              {currentSection}
-            </span>
-          </div>
+        <div className="hidden md:flex items-center gap-3">
+
+  <div className="h-9 w-9 rounded-xl bg-blue-50 flex items-center justify-center">
+    <span className="text-blue-600 font-bold">
+      {currentSection?.charAt(0)}
+    </span>
+  </div>
+
+  <div>
+
+    <p className="text-[11px] uppercase tracking-[0.15em] text-slate-400">
+      Dashboard
+    </p>
+
+    <h2 className="text-lg font-semibold text-slate-800">
+      {currentSection}
+    </h2>
+
+  </div>
+
+</div>
         </div>
 
         {/* Center - Search */}
-        <div className="hidden md:flex flex-1 max-w-md mx-4">
-          <div className="relative w-full">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 focus:bg-white transition-all duration-200"
-            />
-            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-              ⌘K
-            </kbd>
-          </div>
-        </div>
+       <div className="hidden flex-1 justify-center px-8 lg:flex">
+
+  <div className="group relative w-full max-w-[560px]">
+
+    {/* Search Icon */}
+
+    <SearchIcon
+      sx={{ fontSize: 20 }}
+      className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors duration-300 group-focus-within:text-blue-600"
+    />
+
+    {/* Search Input */}
+
+    <input
+      type="text"
+      placeholder="Search customers, organizations..."
+      className="
+      h-12
+      w-full
+      rounded-2xl
+      border
+      border-slate-200
+      bg-white
+      pl-14
+      pr-28
+      text-[15px]
+      text-slate-700
+      placeholder:text-slate-400
+      shadow-sm
+      outline-none
+      transition-all
+      duration-300
+      hover:border-slate-300
+      focus:border-blue-500
+      focus:shadow-[0_0_0_5px_rgba(37,99,235,.08)]
+      "
+    />
+
+    {/* Search Button */}
+
+    <button
+      className="
+      absolute
+      right-2
+      top-1/2
+      -translate-y-1/2
+      rounded-xl
+      bg-[#2563eb]
+      px-5
+      py-2
+      text-sm
+      font-medium
+      text-white
+      transition-all
+      duration-300
+      hover:bg-[#1d4ed8]
+      hover:shadow-lg
+      "
+    >
+      Search
+    </button>
+
+  </div>
+
+</div>
 
         {/* Right section */}
         <div className="flex items-center gap-1 md:gap-2">

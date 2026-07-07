@@ -472,7 +472,7 @@ const Table = ({
         <div>
 
           {title && (
-            <h2 className="text-[30px] font-bold tracking-[-0.03em] text-slate-900">
+            <h2 className="text-[25px] font-bold tracking-[-0.03em] text-slate-900">
               {title}
             </h2>
           )}

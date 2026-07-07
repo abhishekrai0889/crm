@@ -7,7 +7,7 @@ import MainLayout from "./components/layout/MainLayout";
 import AuthLayout from "./components/layout/AuthLayout";
 
 // Auth Pages
-import Login from "./pages/Login";
+// import Login from "./pages/Login";
 import SignIn from "./pages/SignIn";
 import Trial from "./pages/Trial";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -90,14 +90,14 @@ function App() {
         <ToastWrapper />
         <Routes>
           {/* Public Auth Routes - No Layout (Redirect to dashboard if logged in) */}
-          <Route
+          {/* <Route
             path="/login"
             element={
               <PublicRoute>
                 <Login />
               </PublicRoute>
             }
-          />
+          /> */}
           <Route
             path="/signin"
             element={
@@ -141,30 +141,10 @@ function App() {
                 </PublicRoute>
               }
             />
-            <Route
-              path="/contact"
-              element={
-                <PublicRoute>
-                  <Contact />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/privacy-policy"
-              element={
-                <PublicRoute>
-                  <PrivacyPolicy />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/terms-of-service"
-              element={
-                <PublicRoute>
-                  <Terms />
-                </PublicRoute>
-              }
-            />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+            <Route path="/terms-of-service" element={<Terms />} />
             <Route
               path="/table"
               element={
@@ -175,24 +155,24 @@ function App() {
             />
           </Route>
 
-        {/* Protected Routes - With Sidebar Layout */}
-        <Route
-          path="/user/dashboard"
-          element={
-            <ProtectedRoute>
-              <MainLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="notifications" element={<Notifications />} />
-          <Route path="notifications/:id" element={<Notifications />} />
-          <Route path="team" element={<Team />} />
-          <Route path="organizations" element={<BasicTable />} />
-          {/* Unbuilt sections land on an in-layout placeholder */}
-          <Route path="*" element={<ComingSoon />} />
-          {/* Add more protected routes here */}
-        </Route>
+          {/* Protected Routes - With Sidebar Layout */}
+          <Route
+            path="/user/dashboard"
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="notifications/:id" element={<Notifications />} />
+            <Route path="team" element={<Team />} />
+            <Route path="organizations" element={<BasicTable />} />
+            {/* Unbuilt sections land on an in-layout placeholder */}
+            <Route path="*" element={<ComingSoon />} />
+            {/* Add more protected routes here */}
+          </Route>
 
           {/* Catch all - 404 page */}
           <Route path="*" element={<NotFoundPage />} />

@@ -48,7 +48,7 @@ const PricingFaq = () => {
           </h2>
         </div>
 
-        <div className="mx-auto grid max-w-[760px] gap-3">
+        <div className="mx-auto grid  gap-3">
 
           {faqs.map((faq, index) => {
             const active = open === index;

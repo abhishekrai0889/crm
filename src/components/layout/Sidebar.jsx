@@ -355,58 +355,87 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
         }}
       >
         {/* Logo Section */}
-        <div
-          className={`
-          flex items-center h-16 px-4 border-b border-slate-200/50 dark:border-slate-700/50
-          ${isOpen ? "justify-between" : "justify-center"}
-        `}
-        >
-          <motion.div
-            className="flex items-center gap-3"
-            animate={{ opacity: isOpen ? 1 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <motion.div
-              whileHover={{ rotate: -10, scale: 1.05 }}
-              className="relative w-9 h-9 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-blue-500/30"
-            >
-              <span className="relative z-10">E</span>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-50 blur-xl"></div>
-            </motion.div>
-            {isOpen && (
-              <motion.span
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="text-xl font-extrabold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent"
-              >
-                ENTHIS
-              </motion.span>
-            )}
-          </motion.div>
+      {/* Logo Section */}
 
-          <div className="flex items-center gap-1">
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setMobileOpen(false)}
-              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors lg:hidden"
-            >
-              <CloseIcon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 dark:text-slate-400" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1, rotate: isOpen ? 0 : 180 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors hidden lg:block"
-            >
-              {isOpen ? (
-                <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 dark:text-slate-400" />
-              ) : (
-                <MenuIcon className="w-4 h-4 sm:w-5 sm:h-5 text-slate-500 dark:text-slate-400" />
-              )}
-            </motion.button>
-          </div>
-        </div>
+<div
+  className={`
+    flex items-center h-16 px-4 border-b border-slate-200/50 dark:border-slate-700/50
+    ${isOpen ? "justify-between" : "justify-center"}
+  `}
+>
+  {/* Logo */}
+
+  <div className="flex items-center gap-3">
+
+    <motion.button
+      whileHover={{ scale: 1.08, rotate: -8 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() => setIsOpen(!isOpen)}
+      className="
+        relative
+        w-9
+        h-9
+        rounded-xl
+        bg-gradient-to-r
+        from-blue-600
+        via-indigo-600
+        to-purple-600
+        flex
+        items-center
+        justify-center
+        text-white
+        font-bold
+        text-sm
+        shadow-lg
+        shadow-blue-500/30
+        transition-all
+        duration-300
+        flex-shrink-0
+      "
+    >
+      <span className="relative z-10">E</span>
+
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-50 blur-xl"></div>
+    </motion.button>
+
+    <AnimatePresence>
+
+      {isOpen && (
+
+        <motion.span
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -10 }}
+          transition={{ duration: 0.2 }}
+          className="text-xl font-extrabold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent whitespace-nowrap"
+        >
+          ENTHIS
+        </motion.span>
+
+      )}
+
+    </AnimatePresence>
+
+  </div>
+
+  {/* Right Side */}
+
+  <div className="flex items-center gap-1">
+
+    {/* Mobile Close */}
+
+    <motion.button
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      onClick={() => setMobileOpen(false)}
+      className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors lg:hidden"
+    >
+      <CloseIcon className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+    </motion.button>
+
+  </div>
+
+</div>
 
         {/* Navigation */}
         <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-3 custom-scrollbar">

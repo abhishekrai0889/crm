@@ -4,6 +4,8 @@ import XIcon from "@mui/icons-material/X";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
+    const currentYear = new Date().getFullYear();
+
   return (
     <footer className="bg-[#0F1D3A] pt-20 pb-8 text-[#B9C4D6]">
       <div className="mx-auto max-w-[1180px] px-6">
@@ -195,7 +197,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="flex flex-col items-center justify-between gap-5 border-t border-white/10 pt-7 text-sm text-slate-400 md:flex-row">
           <span>
-            © 2026 ENTHIS by Engenia Technologies. All rights reserved.
+           © {currentYear} ENTHIS. All rights reserved.
           </span>
 
           <div className="flex flex-wrap gap-5">
