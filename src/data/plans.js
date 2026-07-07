@@ -1,0 +1,91 @@
+// data/plans.js
+// Shared plan catalog — used by the marketing Pricing page and the in-app
+// Plan & Billing screen. Prices are USD per seat / month.
+// `tier` gives the ordering used to decide upgrade vs downgrade.
+export const plans = [
+  {
+    name: "Starter",
+    tier: 1,
+    color: "bg-[var(--ink-300)]",
+    price: 12,
+    monthly: 15,
+    tagline: "For small teams getting off spreadsheets.",
+    featured: false,
+    custom: false,
+    button: "secondary",
+    features: [
+      "Contacts, companies, leads & deals",
+      "1 visual sales pipeline",
+      "Unlimited contacts",
+      "Two-way Gmail & Outlook sync",
+      "Web forms & lead capture",
+      "AI copilot — 500 actions / month",
+      "Custom reports included",
+      "Email support",
+    ],
+  },
+
+  {
+    name: "Growth",
+    tier: 2,
+    color: "bg-amber-500",
+    price: 28,
+    monthly: 35,
+    tagline: "For growing sales teams that need automation.",
+    featured: true,
+    custom: false,
+    button: "primary",
+    features: [
+      "Everything in Starter, plus",
+      "Multiple pipelines",
+      "Email sequences & meeting scheduler",
+      "Marketing module (light)",
+      "Workflow automation builder",
+      "Telephony bundle — 250 min",
+      "AI copilot — unlimited basic actions",
+      "Priority email support",
+    ],
+  },
+
+  {
+    name: "Pro",
+    tier: 3,
+    color: "bg-[var(--blue-600)]",
+    price: 52,
+    monthly: 65,
+    tagline: "For companies running the full customer lifecycle.",
+    featured: false,
+    custom: false,
+    button: "secondary",
+    features: [
+      "Everything in Growth, plus",
+      "Marketing automation (full)",
+      "Support module with SLAs & live chat",
+      "Projects module with templates",
+      "Custom objects & advanced reports",
+      "AI Agents — Customer & Prospecting",
+      "Quotes, products & e-signature",
+      "Live chat support",
+    ],
+  },
+
+  {
+    name: "Enterprise",
+    tier: 4,
+    color: "bg-[var(--ink-900)]",
+    featured: false,
+    custom: true,
+    button: "secondary",
+    tagline: "Custom plan for security-conscious, larger organizations.",
+    features: [
+      "Everything in Pro, plus",
+      "SAML & SCIM provisioning",
+      "Dedicated database option",
+      "Bring-your-own-key encryption",
+      "White-label & custom domain",
+      "Sandbox environment",
+      "99.95% uptime SLA",
+      "Named customer success manager",
+    ],
+  },
+];

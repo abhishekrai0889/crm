@@ -98,28 +98,183 @@ export const roles = [
   },
 ];
 
-// Backend-enforced policy reference (Phase 0 roles).
-// Values: "full" | "own" | "yes" | "none" | custom label strings
-export const permissionsMatrix = [
-  { area: "Contacts & companies — view / edit", admin: "Full", manager: "Full", user: "Own" },
-  { area: "Contacts — delete / restore", admin: "✓", manager: "✓", user: "—" },
-  { area: "Deals — view / edit", admin: "Full", manager: "Full", user: "Own" },
-  { area: "Deals — delete", admin: "✓", manager: "✓", user: "—" },
-  { area: "Deals — mark Won / Lost", admin: "✓", manager: "✓", user: "Own" },
-  { area: "Leads — view / edit / qualify", admin: "Full", manager: "Full", user: "Own" },
-  { area: "Tickets — view / reply", admin: "Full", manager: "Full", user: "Own" },
-  { area: "Tickets — delete / merge", admin: "✓", manager: "✓", user: "—" },
-  { area: "Projects & tasks", admin: "Full", manager: "Full", user: "Own" },
-  { area: "Campaigns — create / send", admin: "✓", manager: "✓", user: "—" },
-  { area: "Reports — view", admin: "All", manager: "All", user: "Own" },
-  { area: "Reports & dashboards — create / share", admin: "✓", manager: "✓", user: "—" },
-  { area: "Import / export data", admin: "✓", manager: "✓", user: "Export own" },
-  { area: "Custom fields — manage", admin: "✓", manager: "—", user: "—" },
-  { area: "Workflow automations — manage", admin: "✓", manager: "—", user: "—" },
-  { area: "API tokens — personal", admin: "✓", manager: "✓", user: "✓" },
-  { area: "Webhooks — manage", admin: "✓", manager: "—", user: "—" },
-  { area: "Team — add / deactivate / roles", admin: "✓", manager: "—", user: "—" },
-  { area: "Billing & workspace settings", admin: "✓", manager: "—", user: "—" },
-  { area: "Audit log — view", admin: "✓", manager: "—", user: "—" },
-  { area: "GDPR data deletion", admin: "✓", manager: "—", user: "—" },
+/*
+ * Backend-enforced policy reference (Phase 0 predefined roles), mirroring
+ * PRD D.3.4. Two shapes:
+ *
+ *  - permissionModules: record-type resources with granular CRUD verbs
+ *    (view / create / edit / remove) plus resource-specific "special" actions.
+ *  - permissionCapabilities: single-action platform capabilities.
+ *
+ * Scope tokens per role: "full" | "own" | "read" | "yes" | "none"
+ * Values are keyed by role.key so custom roles (Phase 2) just add a key.
+ */
+export const permissionModules = [
+  {
+    module: "Sales",
+    resources: [
+      {
+        key: "contacts",
+        label: "Contacts",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "yes" },
+        edit: { Admin: "full", Manager: "full", User: "own" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [],
+      },
+      {
+        key: "companies",
+        label: "Companies",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "yes" },
+        edit: { Admin: "full", Manager: "full", User: "own" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [],
+      },
+      {
+        key: "deals",
+        label: "Deals",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "yes" },
+        edit: { Admin: "full", Manager: "full", User: "own" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [
+          { label: "Mark Won / Lost", Admin: "yes", Manager: "yes", User: "own" },
+        ],
+      },
+      {
+        key: "leads",
+        label: "Leads",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "yes" },
+        edit: { Admin: "full", Manager: "full", User: "own" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [
+          { label: "Qualify", Admin: "yes", Manager: "yes", User: "own" },
+        ],
+      },
+    ],
+  },
+  {
+    module: "Marketing",
+    resources: [
+      {
+        key: "campaigns",
+        label: "Campaigns",
+        view: { Admin: "full", Manager: "full", User: "none" },
+        create: { Admin: "yes", Manager: "yes", User: "none" },
+        edit: { Admin: "full", Manager: "full", User: "none" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [
+          { label: "Send", Admin: "yes", Manager: "yes", User: "none" },
+        ],
+      },
+      {
+        key: "lists",
+        label: "Contact lists",
+        view: { Admin: "full", Manager: "full", User: "read" },
+        create: { Admin: "yes", Manager: "yes", User: "none" },
+        edit: { Admin: "full", Manager: "full", User: "none" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [],
+      },
+    ],
+  },
+  {
+    module: "Support",
+    resources: [
+      {
+        key: "tickets",
+        label: "Tickets",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "own" },
+        edit: { Admin: "full", Manager: "full", User: "own" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [
+          { label: "Merge / Split", Admin: "yes", Manager: "yes", User: "none" },
+        ],
+      },
+    ],
+  },
+  {
+    module: "Projects",
+    resources: [
+      {
+        key: "projects",
+        label: "Projects",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "own" },
+        edit: { Admin: "full", Manager: "full", User: "own" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [],
+      },
+      {
+        key: "tasks",
+        label: "Tasks",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "yes" },
+        edit: { Admin: "full", Manager: "full", User: "own" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [
+          { label: "Complete", Admin: "yes", Manager: "yes", User: "own" },
+        ],
+      },
+    ],
+  },
+  {
+    module: "Insights",
+    resources: [
+      {
+        key: "reports",
+        label: "Reports",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "none" },
+        edit: { Admin: "full", Manager: "full", User: "none" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [
+          { label: "Share", Admin: "yes", Manager: "yes", User: "none" },
+        ],
+      },
+      {
+        key: "dashboards",
+        label: "Dashboards",
+        view: { Admin: "full", Manager: "full", User: "own" },
+        create: { Admin: "yes", Manager: "yes", User: "none" },
+        edit: { Admin: "full", Manager: "full", User: "none" },
+        remove: { Admin: "yes", Manager: "yes", User: "none" },
+        special: [],
+      },
+    ],
+  },
+];
+
+export const permissionCapabilities = [
+  {
+    module: "Data",
+    items: [
+      { label: "Import records", Admin: "yes", Manager: "yes", User: "none" },
+      { label: "Export records", Admin: "yes", Manager: "yes", User: "own" },
+      { label: "Custom fields — manage", Admin: "yes", Manager: "none", User: "none" },
+      { label: "Data deletion (GDPR erasure)", Admin: "yes", Manager: "none", User: "none" },
+    ],
+  },
+  {
+    module: "Automation & API",
+    items: [
+      { label: "Workflow automations — manage", Admin: "yes", Manager: "none", User: "none" },
+      { label: "API tokens — personal", Admin: "yes", Manager: "yes", User: "yes" },
+      { label: "API tokens — view / revoke others'", Admin: "yes", Manager: "none", User: "none" },
+      { label: "Webhooks — manage", Admin: "yes", Manager: "none", User: "none" },
+    ],
+  },
+  {
+    module: "Administration",
+    items: [
+      { label: "Team — add / deactivate members", Admin: "yes", Manager: "none", User: "none" },
+      { label: "Role assignment — change", Admin: "yes", Manager: "none", User: "none" },
+      { label: "Billing — view / manage", Admin: "yes", Manager: "none", User: "none" },
+      { label: "Workspace settings — edit", Admin: "yes", Manager: "none", User: "none" },
+      { label: "Audit log — view", Admin: "yes", Manager: "none", User: "none" },
+    ],
+  },
 ];

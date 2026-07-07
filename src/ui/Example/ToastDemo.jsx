@@ -28,19 +28,19 @@ const ToastDemo = () => {
 
   // Basic Toast Types
   const showSuccess = () => {
-    toast.success("✅ Operation completed successfully!");
+    toast.success("Operation completed successfully!");
   };
 
   const showError = () => {
-    toast.error("❌ Something went wrong. Please try again.");
+    toast.error("Something went wrong. Please try again.");
   };
 
   const showWarning = () => {
-    toast.warning("⚠️ Please review your input before submitting.");
+    toast.warning("Please review your input before submitting.");
   };
 
   const showInfo = () => {
-    toast.info("ℹ️ New update available. Refresh to install.");
+    toast.info("New update available. Refresh to install.");
   };
 
   // Custom Duration
@@ -65,7 +65,7 @@ const ToastDemo = () => {
 
     await toast.promise(fakeApiCall(), {
       pending: "⏳ Saving your changes...",
-      success: "✅ Changes saved successfully!",
+      success: " Changes saved successfully!",
       error: "❌ Failed to save changes. Please try again.",
     });
   };
@@ -79,7 +79,7 @@ const ToastDemo = () => {
     await toast
       .promise(fakeApiCall(), {
         pending: "⏳ Processing your request...",
-        success: "✅ Request completed!",
+        success: " Request completed!",
         error: "❌ Request failed. Please try again.",
       })
       .catch(() => {});
@@ -87,33 +87,33 @@ const ToastDemo = () => {
 
   // Action Toasts
   const showSaveToast = () => {
-    toast.success("💾 Document saved successfully!");
+    toast.success("Document saved successfully!");
   };
 
   const showDeleteToast = () => {
-    toast.warning("🗑️ Item moved to trash");
+    toast.warning("Item moved to trash");
   };
 
   const showSendToast = () => {
-    toast.info("📤 Message sent successfully!");
+    toast.info("Message sent successfully!");
   };
 
   const showDownloadToast = () => {
-    toast.success("📥 File downloaded successfully!");
+    toast.success("File downloaded successfully!");
   };
 
   const showUploadToast = () => {
-    toast.success("📤 File uploaded successfully!");
+    toast.success("File uploaded successfully!");
   };
 
   // Complex Toasts with Actions
   const showUndoToast = () => {
-    toast.success("✅ Item deleted", 5000);
+    toast.success(" Item deleted", 5000);
     // You can add custom actions here
   };
 
   const showSessionToast = () => {
-    toast.warning("⏰ Your session will expire in 5 minutes", 6000);
+    toast.warning("Your session will expire in 5 minutes", 6000);
   };
 
   // Simulate Loading
@@ -124,7 +124,7 @@ const ToastDemo = () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 3000));
       toast.removeToast(id);
-      toast.success("✅ Data loaded successfully!");
+      toast.success(" Data loaded successfully!");
     } catch (error) {
       toast.removeToast(id);
       toast.error("❌ Failed to load data");
@@ -135,10 +135,10 @@ const ToastDemo = () => {
 
   // Multiple Toasts
   const showMultipleToasts = () => {
-    toast.success("✅ First toast");
-    setTimeout(() => toast.info("ℹ️ Second toast"), 500);
-    setTimeout(() => toast.warning("⚠️ Third toast"), 1000);
-    setTimeout(() => toast.error("❌ Fourth toast"), 1500);
+    toast.success(" First toast");
+    setTimeout(() => toast.info("ℹSecond toast"), 500);
+    setTimeout(() => toast.warning("Third toast"), 1000);
+    setTimeout(() => toast.error("Fourth toast"), 1500);
   };
 
   // Clear All Toasts

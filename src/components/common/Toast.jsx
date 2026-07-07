@@ -226,7 +226,7 @@ const Toast = ({ toast, onRemove }) => {
               transition={{ delay: 0.12 }}
             >
               <p className={`text-sm font-bold leading-relaxed ${config.text}`}>
-                {toast.title || "Notification"}
+                {toast.title || ""}
               </p>
               <p className={`text-sm ${config.subtext} mt-0.5`}>
                 {toast.message}
