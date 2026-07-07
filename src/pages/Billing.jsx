@@ -19,7 +19,11 @@ import LockIcon from "@mui/icons-material/Lock";
 import Modal from "../ui/Modal";
 import Table from "../ui/Table";
 import { plans } from "../data/plans";
-
+import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
+import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 const MIN_SEATS = 1;
 const MAX_SEATS = 100;
 
@@ -37,11 +41,41 @@ const paymentMethod = {
 };
 
 const invoices = [
-  { id: "INV-2026-007", date: "Jul 1, 2026", desc: "Growth · 7 seats · annual", amount: 2352, status: "Paid" },
-  { id: "INV-2026-006", date: "Jun 1, 2026", desc: "Growth · 6 seats · annual", amount: 2016, status: "Paid" },
-  { id: "INV-2026-005", date: "May 1, 2026", desc: "Growth · 6 seats · annual", amount: 2016, status: "Paid" },
-  { id: "INV-2026-004", date: "Apr 1, 2026", desc: "Starter · 6 seats · annual", amount: 864, status: "Paid" },
-  { id: "INV-2026-003", date: "Mar 1, 2026", desc: "Starter · 5 seats · annual", amount: 720, status: "Paid" },
+  {
+    id: "INV-2026-007",
+    date: "Jul 1, 2026",
+    desc: "Growth · 7 seats · annual",
+    amount: 2352,
+    status: "Paid",
+  },
+  {
+    id: "INV-2026-006",
+    date: "Jun 1, 2026",
+    desc: "Growth · 6 seats · annual",
+    amount: 2016,
+    status: "Paid",
+  },
+  {
+    id: "INV-2026-005",
+    date: "May 1, 2026",
+    desc: "Growth · 6 seats · annual",
+    amount: 2016,
+    status: "Paid",
+  },
+  {
+    id: "INV-2026-004",
+    date: "Apr 1, 2026",
+    desc: "Starter · 6 seats · annual",
+    amount: 864,
+    status: "Paid",
+  },
+  {
+    id: "INV-2026-003",
+    date: "Mar 1, 2026",
+    desc: "Starter · 5 seats · annual",
+    amount: 720,
+    status: "Paid",
+  },
 ];
 
 const Billing = () => {
@@ -72,7 +106,12 @@ const Billing = () => {
   const openChange = (plan) => setPendingChange(plan);
 
   const confirmChange = () => {
-    setSubscription({ ...subscription, plan: pendingChange.name, annual, seats });
+    setSubscription({
+      ...subscription,
+      plan: pendingChange.name,
+      annual,
+      seats,
+    });
     const direction =
       pendingChange.tier > currentPlan.tier ? "upgraded to" : "changed to";
     toast.success(`Plan ${direction} ${pendingChange.name}`);
@@ -93,8 +132,16 @@ const Billing = () => {
 
   const tabs = [
     { key: "plan", label: "Plan", icon: <LayersIcon sx={{ fontSize: 17 }} /> },
-    { key: "payment", label: "Payment method", icon: <CreditCardIcon sx={{ fontSize: 17 }} /> },
-    { key: "invoices", label: "Invoices", icon: <ReceiptLongIcon sx={{ fontSize: 17 }} /> },
+    {
+      key: "payment",
+      label: "Payment method",
+      icon: <CreditCardIcon sx={{ fontSize: 17 }} />,
+    },
+    {
+      key: "invoices",
+      label: "Invoices",
+      icon: <ReceiptLongIcon sx={{ fontSize: 17 }} />,
+    },
   ];
 
   const invoiceColumns = [
@@ -143,7 +190,9 @@ const Billing = () => {
     <div>
       {/* Page header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-800">Plan &amp; Billing</h1>
+        <h1 className="text-2xl font-bold text-slate-800">
+          Plan &amp; Billing
+        </h1>
         <p className="text-sm text-slate-500 mt-1">
           View your current plan, manage payment and download invoices.
         </p>
@@ -195,23 +244,80 @@ const Billing = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 border-b border-slate-200 mb-6 overflow-x-auto">
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border-b-2 -mb-px whitespace-nowrap transition-all duration-200 ${
-              activeTab === tab.key
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-slate-500 hover:text-slate-700"
-            }`}
+     <div className="mb-8 border-b border-slate-200">
+
+  <div className="flex items-center gap-1 overflow-x-auto">
+
+    {tabs.map((tab) => {
+      const active = activeTab === tab.key;
+
+      return (
+        <button
+          key={tab.key}
+          onClick={() => setActiveTab(tab.key)}
+          className={`
+            relative
+            flex
+            items-center
+            gap-3
+            px-6
+            py-4
+            rounded-t-2xl
+            whitespace-nowrap
+            transition-all
+            duration-300
+            group
+            ${
+              active
+                ? "bg-white text-blue-600 border border-slate-200 border-b-white shadow-[0_-2px_15px_rgba(15,23,42,.06)]"
+                : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+            }
+          `}
+        >
+
+          {/* Icon */}
+
+          <div
+            className={`
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              transition-all
+              duration-300
+              ${
+                active
+                  ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
+                  : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
+              }
+            `}
           >
             {tab.icon}
-            {tab.label}
-          </button>
-        ))}
-      </div>
+          </div>
 
+          <div className="text-left">
+
+            <p className="text-[15px] font-semibold">
+              {tab.label}
+            </p>
+
+           
+
+          </div>
+
+          {active && (
+            <span className="absolute bottom-[-2px] left-0 h-[3px] w-full bg-white"></span>
+          )}
+
+        </button>
+      );
+    })}
+
+  </div>
+
+</div>
       {/* ---------- Plan tab ---------- */}
       {activeTab === "plan" && (
         <div>
@@ -253,7 +359,9 @@ const Billing = () => {
 
               {/* Seat stepper */}
               <div className="inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
-                <span className="text-sm font-medium text-slate-500">Seats</span>
+                <span className="text-sm font-medium text-slate-500">
+                  Seats
+                </span>
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => adjustSeats(-1)}
@@ -427,67 +535,216 @@ const Billing = () => {
             </div>
             <div className="p-6">
               {/* Card visual */}
-              <div className="relative rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 text-white p-5 h-44 flex flex-col justify-between shadow-lg">
-                <div className="flex items-center justify-between">
-                  <CreditCardIcon sx={{ fontSize: 28 }} className="opacity-80" />
-                  <span className="text-sm font-bold tracking-wide">
-                    {paymentMethod.brand}
-                  </span>
-                </div>
-                <div className="text-xl font-semibold tracking-[0.2em]">
-                  •••• •••• •••• {paymentMethod.last4}
-                </div>
-                <div className="flex items-end justify-between text-xs">
-                  <div>
-                    <p className="text-slate-400 uppercase tracking-wide text-[10px]">
-                      Card holder
-                    </p>
-                    <p className="font-medium">{paymentMethod.holder}</p>
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E3A8A] to-[#2563EB] h-[260px] p-6 shadow-xl">
+                {/* Background Glow */}
+                <div className="absolute -top-20 -right-16 h-56 w-56 rounded-full bg-white/10 blur-3xl"></div>
+                <div className="absolute -bottom-24 -left-20 h-60 w-60 rounded-full bg-cyan-300/10 blur-3xl"></div>
+
+                {/* Header */}
+                <div className="relative z-10 flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    {/* Card Chip */}
+                    <div className="w-12 h-9 rounded-md bg-gradient-to-br from-yellow-300 to-yellow-500 shadow-inner"></div>
+
+                    <CreditCardIcon
+                      sx={{
+                        fontSize: 28,
+                        color: "#fff",
+                        opacity: 0.8,
+                      }}
+                    />
                   </div>
+
                   <div className="text-right">
-                    <p className="text-slate-400 uppercase tracking-wide text-[10px]">
+                    <span className="inline-flex items-center rounded-full bg-emerald-500/20 border border-emerald-300/30 px-3 py-1 text-[11px] font-semibold text-emerald-200">
+                      Default
+                    </span>
+
+                    <h4 className="mt-3 text-xl font-bold text-white">
+                      {paymentMethod.brand}
+                    </h4>
+                  </div>
+                </div>
+
+                {/* Card Number */}
+
+                <div className="relative z-10 mt-10">
+                  <p className="text-[30px] tracking-[8px] font-semibold text-white">
+                    •••• •••• •••• {paymentMethod.last4}
+                  </p>
+                </div>
+
+                {/* Bottom */}
+
+                <div className="absolute bottom-6 left-6 right-6 z-10 flex items-end justify-between">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[2px] text-blue-200">
+                      Card Holder
+                    </p>
+
+                    <h4 className="mt-1 text-base font-semibold text-white">
+                      {paymentMethod.holder}
+                    </h4>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-[10px] uppercase tracking-[2px] text-blue-200">
                       Expires
                     </p>
-                    <p className="font-medium">{paymentMethod.expiry}</p>
+
+                    <h4 className="mt-1 text-base font-semibold text-white">
+                      {paymentMethod.expiry}
+                    </h4>
                   </div>
                 </div>
               </div>
-              <p className="flex items-center gap-1.5 text-xs text-slate-400 mt-4">
-                <LockIcon sx={{ fontSize: 14 }} />
-                Payments are processed securely by Stripe. Card details never
-                touch our servers.
-              </p>
+
+              {/* Security */}
+
+              <div className="mt-5 rounded-2xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-green-50 px-5 py-4 flex items-center gap-4">
+                <div className="h-11 w-11 rounded-full bg-emerald-100 flex items-center justify-center">
+                  <LockIcon
+                    sx={{
+                      fontSize: 20,
+                      color: "#059669",
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-semibold text-emerald-700">
+                    Secure Payments
+                  </h4>
+
+                  <p className="text-xs text-emerald-600 mt-1">
+                    Payments are securely processed by <strong>Stripe</strong>.
+                    Card details are encrypted and never stored on our servers.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Billing details */}
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-md overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-              <h3 className="text-base font-bold text-slate-800">
-                Billing details
-              </h3>
-              <button
-                onClick={() => toast.info("Edit billing details — coming soon")}
-                className="text-sm font-medium text-blue-600 hover:text-blue-700"
-              >
-                Edit
-              </button>
-            </div>
-            <div className="p-6 divide-y divide-slate-100">
-              {[
-                { label: "Billing email", value: paymentMethod.billingEmail },
-                { label: "Billing address", value: paymentMethod.address },
-                { label: "Tax ID", value: paymentMethod.taxId },
-              ].map((row) => (
-                <div key={row.label} className="py-3 first:pt-0 last:pb-0">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
-                    {row.label}
-                  </p>
-                  <p className="text-sm text-slate-700 mt-1">{row.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+       <div className="bg-white rounded-3xl border border-slate-200 shadow-lg overflow-hidden">
+
+  {/* Header */}
+
+  <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+
+    <div>
+
+      <h3 className="text-lg font-bold text-slate-800">
+        Billing Details
+      </h3>
+
+      <p className="text-sm text-slate-500 mt-1">
+        Manage your billing information
+      </p>
+
+    </div>
+
+    <button
+      onClick={() => toast.info("Edit billing details — coming soon")}
+      className="flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-all"
+    >
+      <EditRoundedIcon sx={{ fontSize: 18 }} />
+      Edit
+    </button>
+
+  </div>
+
+  {/* Body */}
+
+  <div className="p-6 space-y-4">
+
+    {/* Email */}
+
+    <div className="group flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-blue-300 hover:bg-blue-50">
+
+      <div className="flex items-center gap-4">
+
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-600">
+          <EmailRoundedIcon sx={{ fontSize: 24 }} />
+        </div>
+
+        <div>
+
+          <p className="text-xs uppercase tracking-wider text-slate-400">
+            Billing Email
+          </p>
+
+          <h4 className="mt-1 font-semibold text-slate-800">
+            {paymentMethod.billingEmail}
+          </h4>
+
+        </div>
+
+      </div>
+
+      <ChevronRightRoundedIcon className="text-slate-400 transition group-hover:text-blue-600 group-hover:translate-x-1" />
+
+    </div>
+
+    {/* Address */}
+
+    <div className="group flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-violet-300 hover:bg-violet-50">
+
+      <div className="flex items-center gap-4">
+
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-100 text-violet-600">
+          <LocationOnRoundedIcon sx={{ fontSize: 24 }} />
+        </div>
+
+        <div>
+
+          <p className="text-xs uppercase tracking-wider text-slate-400">
+            Billing Address
+          </p>
+
+          <h4 className="mt-1 font-semibold text-slate-800">
+            {paymentMethod.address}
+          </h4>
+
+        </div>
+
+      </div>
+
+      <ChevronRightRoundedIcon className="text-slate-400 transition group-hover:text-violet-600 group-hover:translate-x-1" />
+
+    </div>
+
+    {/* Tax */}
+
+    <div className="group flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-emerald-300 hover:bg-emerald-50">
+
+      <div className="flex items-center gap-4">
+
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
+          <BadgeRoundedIcon sx={{ fontSize: 24 }} />
+        </div>
+
+        <div>
+
+          <p className="text-xs uppercase tracking-wider text-slate-400">
+            Tax ID
+          </p>
+
+          <h4 className="mt-1 font-semibold text-slate-800">
+            {paymentMethod.taxId}
+          </h4>
+
+        </div>
+
+      </div>
+
+      <ChevronRightRoundedIcon className="text-slate-400 transition group-hover:text-emerald-600 group-hover:translate-x-1" />
+
+    </div>
+
+  </div>
+
+</div>
         </div>
       )}
 
@@ -557,7 +814,11 @@ const Billing = () => {
                       className="flex items-start gap-2 text-sm text-slate-600"
                     >
                       <CheckRoundedIcon
-                        sx={{ fontSize: 16, color: "#059669", marginTop: "3px" }}
+                        sx={{
+                          fontSize: 16,
+                          color: "#059669",
+                          marginTop: "3px",
+                        }}
                       />
                       {f}
                     </li>

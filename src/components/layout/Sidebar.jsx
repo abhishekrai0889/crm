@@ -354,88 +354,122 @@ const Sidebar = ({ isOpen, setIsOpen, mobileOpen, setMobileOpen }) => {
               : "translateX(0)",
         }}
       >
+       
         {/* Logo Section */}
-      {/* Logo Section */}
 
-<div
-  className={`
+        <div
+          className={`
     flex items-center h-16 px-4 border-b border-slate-200/50 dark:border-slate-700/50
     ${isOpen ? "justify-between" : "justify-center"}
   `}
->
-  {/* Logo */}
-
-  <div className="flex items-center gap-3">
-
-    <motion.button
-      whileHover={{ scale: 1.08, rotate: -8 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={() => setIsOpen(!isOpen)}
-      className="
-        relative
-        w-9
-        h-9
-        rounded-xl
-        bg-gradient-to-r
-        from-blue-600
-        via-indigo-600
-        to-purple-600
-        flex
-        items-center
-        justify-center
-        text-white
-        font-bold
-        text-sm
-        shadow-lg
-        shadow-blue-500/30
-        transition-all
-        duration-300
-        flex-shrink-0
-      "
-    >
-      <span className="relative z-10">E</span>
-
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-50 blur-xl"></div>
-    </motion.button>
-
-    <AnimatePresence>
-
-      {isOpen && (
-
-        <motion.span
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -10 }}
-          transition={{ duration: 0.2 }}
-          className="text-xl font-extrabold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent whitespace-nowrap"
         >
-          ENTHIS
-        </motion.span>
+          {/* Left */}
 
-      )}
+          <AnimatePresence mode="wait">
+            {isOpen ? (
+              <motion.div
+                key="logo"
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -12 }}
+                transition={{ duration: 0.25 }}
+                className="flex items-center gap-3"
+              >
+                {/* Logo */}
 
-    </AnimatePresence>
+                <motion.div
+                  whileHover={{ rotate: -8, scale: 1.05 }}
+                  className="relative w-9 h-9 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30"
+                >
+                  <span className="relative z-10">E</span>
 
-  </div>
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 opacity-40 blur-xl"></div>
+                </motion.div>
 
-  {/* Right Side */}
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-xl font-extrabold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent whitespace-nowrap"
+                >
+                  ENTHIS
+                </motion.span>
+              </motion.div>
+            ) : (
+             <motion.button
+  key="menu"
+  initial={{ opacity: 0, scale: 0.8, rotate: -90 }}
+  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+  exit={{ opacity: 0, scale: 0.8, rotate: 90 }}
+  whileHover={{
+    scale: 1.08,
+    rotate: 90,
+    y: -2,
+  }}
+  whileTap={{ scale: 0.95 }}
+  transition={{ duration: 0.3 }}
+  onClick={() => setIsOpen(true)}
+  className="
+    group
+    relative
+    flex
+    h-10
+    w-10
+    items-center
+    justify-center
+    rounded-xl
+    bg-gradient-to-br
+    from-blue-600
+    via-indigo-600
+    to-violet-600
+    shadow-lg
+    shadow-blue-500/25
+    overflow-hidden
+  "
+>
+  {/* Glow */}
+  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-500 opacity-0 blur-lg transition-all duration-300 group-hover:opacity-60" />
 
-  <div className="flex items-center gap-1">
+  {/* Shine */}
+  <span className="absolute -left-8 top-0 h-full w-5 rotate-12 bg-white/30 blur-sm transition-all duration-700 group-hover:left-14" />
 
-    {/* Mobile Close */}
+  {/* Icon */}
+  <MenuIcon
+    sx={{ fontSize: 22 }}
+    className="relative z-10 text-white transition-transform duration-300 group-hover:rotate-180"
+  />
+</motion.button>
+            )}
+          </AnimatePresence>
 
-    <motion.button
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-      onClick={() => setMobileOpen(false)}
-      className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors lg:hidden"
-    >
-      <CloseIcon className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-    </motion.button>
+          {/* Right */}
 
-  </div>
+          {isOpen && (
+            <div className="flex items-center gap-1">
+              {/* Mobile Close */}
 
-</div>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setMobileOpen(false)}
+                className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors lg:hidden"
+              >
+                <CloseIcon className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+              </motion.button>
+
+              {/* Desktop Collapse */}
+
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsOpen(false)}
+                className="hidden lg:flex p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              >
+                <ChevronLeftIcon className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+              </motion.button>
+            </div>
+          )}
+        </div>
 
         {/* Navigation */}
         <nav className="flex-1 min-h-0 overflow-y-auto py-3 px-3 custom-scrollbar">
