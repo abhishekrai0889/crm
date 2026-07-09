@@ -1,6 +1,6 @@
 import AuthInfo from "../common/AuthInfo";
 
-export default function LoginInfo() {
+const LoginInfo: React.FC = () => {
   return (
     <AuthInfo
       badge="CRM PLATFORM"
@@ -14,4 +14,6 @@ customer command center.`}
       ]}
     />
   );
-}
+};
+
+export default LoginInfo;

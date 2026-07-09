@@ -1,10 +1,11 @@
+import { FC } from "react";
+import { Link } from "react-router-dom";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import XIcon from "@mui/icons-material/X";
-import { Link } from "react-router-dom";
 
-const Footer = () => {
-    const currentYear = new Date().getFullYear();
+const Footer: FC = () => {
+  const currentYear: number = new Date().getFullYear();
 
   return (
     <footer className="bg-[#0F1D3A] pt-20 pb-8 text-[#B9C4D6]">
@@ -77,44 +78,11 @@ const Footer = () => {
             </h4>
 
             <ul className="space-y-3 text-sm">
-              <li>
-                <Link to="/sales-crm" className="transition hover:text-white">
-                  Sales CRM
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/marketing-automation"
-                  className="transition hover:text-white"
-                >
-                  Marketing Automation
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/customer-support"
-                  className="transition hover:text-white"
-                >
-                  Customer Support
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/projects"
-                  className="transition hover:text-white"
-                >
-                  Projects & Tasks
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/pricing" className="transition hover:text-white">
-                  Pricing
-                </Link>
-              </li>
+              <li><Link to="/sales-crm" className="transition hover:text-white">Sales CRM</Link></li>
+              <li><Link to="/marketing-automation" className="transition hover:text-white">Marketing Automation</Link></li>
+              <li><Link to="/customer-support" className="transition hover:text-white">Customer Support</Link></li>
+              <li><Link to="/projects" className="transition hover:text-white">Projects & Tasks</Link></li>
+              <li><Link to="/pricing" className="transition hover:text-white">Pricing</Link></li>
             </ul>
           </div>
 
@@ -125,17 +93,8 @@ const Footer = () => {
             </h4>
 
             <ul className="space-y-3 text-sm">
-              <li>
-                <Link to="/about" className="transition hover:text-white">
-                  About Us
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/contact" className="transition hover:text-white">
-                  Contact
-                </Link>
-              </li>
+              <li><Link to="/about" className="transition hover:text-white">About Us</Link></li>
+              <li><Link to="/contact" className="transition hover:text-white">Contact</Link></li>
             </ul>
           </div>
 
@@ -147,10 +106,7 @@ const Footer = () => {
 
             <ul className="space-y-3 text-sm">
               <li>
-                <Link
-                  to="/system-status"
-                  className="transition hover:text-white"
-                >
+                <Link to="/system-status" className="transition hover:text-white">
                   System Status
                 </Link>
               </li>
@@ -164,41 +120,17 @@ const Footer = () => {
             </h4>
 
             <ul className="space-y-3 text-sm">
-              <li>
-                <Link to="/signup" className="transition hover:text-white">
-                  Create Account
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/login" className="transition hover:text-white">
-                  Sign In
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/forgot-password"
-                  className="transition hover:text-white"
-                >
-                  Reset Password
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/demo" className="transition hover:text-white">
-                  App Demo
-                </Link>
-              </li>
+              <li><Link to="/signup" className="transition hover:text-white">Create Account</Link></li>
+              <li><Link to="/login" className="transition hover:text-white">Sign In</Link></li>
+              <li><Link to="/forgot-password" className="transition hover:text-white">Reset Password</Link></li>
+              <li><Link to="/demo" className="transition hover:text-white">App Demo</Link></li>
             </ul>
           </div>
         </div>
 
         {/* Bottom */}
         <div className="flex flex-col items-center justify-between gap-5 border-t border-white/10 pt-7 text-sm text-slate-400 md:flex-row">
-          <span>
-           © {currentYear} ENTHIS. All rights reserved.
-          </span>
+          <span>© {currentYear} ENTHIS. All rights reserved.</span>
 
           <div className="flex flex-wrap gap-5">
             <Link to="/privacy-policy" className="transition hover:text-white">

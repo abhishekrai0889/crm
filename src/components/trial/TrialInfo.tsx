@@ -1,6 +1,6 @@
 import AuthInfo from "../common/AuthInfo";
 
-export default function TrialInfo() {
+const TrialInfo: React.FC = () => {
   return (
     <AuthInfo
       badge="START FREE TRIAL"
@@ -14,4 +14,6 @@ Team live by Friday.`}
       ]}
     />
   );
-}
+};
+
+export default TrialInfo;

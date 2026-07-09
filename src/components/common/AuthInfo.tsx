@@ -1,8 +1,15 @@
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import SectionBadge from "./SectionBadge";
 import { Link } from "react-router-dom";
+import SectionBadge from "./SectionBadge";
 
-const AuthInfo = ({
+interface AuthInfoProps {
+  badge: string;
+  title: string;
+  description: string;
+  features: string[];
+}
+
+const AuthInfo: React.FC<AuthInfoProps> = ({
   badge,
   title,
   description,
@@ -31,49 +38,53 @@ const AuthInfo = ({
       />
 
       {/* Logo */}
+      <div className="relative z-10">
+        <Link to="/" className="inline-flex items-center gap-3">
+          <svg
+            className="h-10 w-10"
+            viewBox="0 0 40 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient
+                id="heroLogoGradient"
+                x1="0"
+                y1="0"
+                x2="40"
+                y2="40"
+              >
+                <stop offset="0%" stopColor="#2E6BEF" />
+                <stop offset="100%" stopColor="#10399A" />
+              </linearGradient>
+            </defs>
 
-   <div className="relative z-10">
-  <Link to="/" className="inline-flex items-center gap-3">
-    <svg
-      className="h-10 w-10"
-      viewBox="0 0 40 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient id="heroLogoGradient" x1="0" y1="0" x2="40" y2="40">
-          <stop offset="0%" stopColor="#2E6BEF" />
-          <stop offset="100%" stopColor="#10399A" />
-        </linearGradient>
-      </defs>
+            <rect
+              width="40"
+              height="40"
+              rx="10"
+              fill="url(#heroLogoGradient)"
+            />
 
-      <rect
-        width="40"
-        height="40"
-        rx="10"
-        fill="url(#heroLogoGradient)"
-      />
+            <path
+              d="M12 11h16v4H17v3h9v4h-9v3h11v4H12V11z"
+              fill="white"
+            />
+          </svg>
 
-      <path
-        d="M12 11h16v4H17v3h9v4h-9v3h11v4H12V11z"
-        fill="white"
-      />
-    </svg>
+          <h2 className="text-[30px] font-extrabold tracking-tight text-white">
+            ENTH<span className="text-[#5B8DF5]">IS</span>
+          </h2>
+        </Link>
+      </div>
 
-    <h2 className="text-[30px] font-extrabold tracking-tight text-white">
-      ENTH<span className="text-[#5B8DF5]">IS</span>
-    </h2>
-  </Link>
-</div>
       {/* Content */}
-
       <div className="relative z-10 my-auto max-w-[430px]">
-
-        <SectionBadge className="border border-white/10 bg-white/10 text-white backdrop-blur text-[11px]">
+        <SectionBadge className="border border-white/10 bg-white/10 text-[11px] text-white backdrop-blur">
           {badge}
         </SectionBadge>
 
-        <h1 className="mt-6 text-[40px] font-extrabold leading-[1.08] tracking-[-0.03em] whitespace-pre-line">
+        <h1 className="mt-6 whitespace-pre-line text-[40px] font-extrabold leading-[1.08] tracking-[-0.03em]">
           {title}
         </h1>
 
@@ -82,8 +93,7 @@ const AuthInfo = ({
         </p>
 
         <div className="mt-9 space-y-5">
-
-          {features.map((item) => (
+          {features.map((item: string) => (
             <div
               key={item}
               className="flex items-center gap-4"
@@ -100,24 +110,17 @@ const AuthInfo = ({
               <span className="text-[16px] text-white/90">
                 {item}
               </span>
-
             </div>
           ))}
-
         </div>
-
       </div>
 
       {/* Footer */}
-
       <div className="relative z-10 mt-12 flex items-center justify-between border-t border-white/10 pt-6 text-[13px] text-white/50">
-
         <span>© 2026 ENTHIS</span>
 
         <span>Powered by Engenia</span>
-
       </div>
-
     </aside>
   );
 };

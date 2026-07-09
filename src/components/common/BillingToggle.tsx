@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { motion } from "framer-motion";
 
-const BillingToggle = ({
+interface BillingToggleProps {
+  defaultAnnual?: boolean;
+  onChange?: (value: boolean) => void;
+}
+
+const BillingToggle: FC<BillingToggleProps> = ({
   defaultAnnual = true,
   onChange,
 }) => {
-  const [annual, setAnnual] = useState(defaultAnnual);
+  const [annual, setAnnual] = useState<boolean>(defaultAnnual);
 
-  const handleToggle = () => {
+  const handleToggle = (): void => {
     const value = !annual;
     setAnnual(value);
 
@@ -32,14 +37,13 @@ const BillingToggle = ({
         Monthly
       </span>
 
-     <button
-  onClick={handleToggle}
-  className={`relative h-7 w-14 rounded-full transition-all duration-300 ${
-    annual
-      ? "bg-[var(--blue-600)]"
-      : "bg-[var(--ink-300)]"
-  }`}
->
+      <button
+        type="button"
+        onClick={handleToggle}
+        className={`relative h-7 w-14 rounded-full transition-all duration-300 ${
+          annual ? "bg-[var(--blue-600)]" : "bg-[var(--ink-300)]"
+        }`}
+      >
         <motion.div
           layout
           transition={{

@@ -1,13 +1,14 @@
+import { FC } from "react";
+import { motion } from "framer-motion";
+
 import SectionBadge from "../common/SectionBadge";
 import SectionHeading from "../common/SectionHeading";
 import BillingToggle from "../common/BillingToggle";
 import SectionDescription from "../common/SectionDescription";
 
-import { motion } from "framer-motion";
-
-const PricingHero = () => {
+const PricingHero: FC = () => {
   return (
-   <section className="border-b border-[var(--line)] bg-[var(--bg)] py-20">
+    <section className="border-b border-[var(--line)] bg-[var(--bg)] py-20">
       <div className="mx-auto max-w-[1180px] px-6 text-center">
         <SectionBadge>Pricing</SectionBadge>
 
@@ -18,6 +19,7 @@ const PricingHero = () => {
             No contact-count traps.
           </>
         </SectionHeading>
+
         <SectionDescription>
           ENTHIS gives your whole company a single customer record, a single
           timeline and AI in every plan — without the pricing surprises of the

@@ -1,60 +1,57 @@
+import { FC } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-const PricingCta = () => {
+const PricingCta: FC = () => {
   return (
     <section className="pt-0 pb-20">
       <div className="mx-auto max-w-[1180px] px-6">
-
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="
+            relative
+            overflow-hidden
             rounded-[20px]
+            bg-[linear-gradient(120deg,var(--blue-900),var(--blue-700))]
             px-8
             py-14
             text-center
             text-white
             md:px-16
             md:py-20
-            bg-[linear-gradient(120deg,var(--blue-900),var(--blue-700))]
-            relative
-            overflow-hidden
           "
         >
           {/* Radial Glow */}
-
           <div
             className="
+              pointer-events-none
               absolute
               left-0
               top-0
               h-[320px]
               w-[600px]
+              -translate-x-1/3
+              -translate-y-1/2
               rounded-full
               bg-white/10
               blur-3xl
-              -translate-x-1/3
-              -translate-y-1/2
-              pointer-events-none
             "
           />
 
           <div className="relative z-10">
-
             <h2 className="text-[32px] font-bold tracking-[-0.02em] md:text-[44px]">
               Not sure which plan fits?
             </h2>
 
             <p className="mx-auto mt-5 max-w-[560px] text-[17px] leading-8 text-[var(--blue-100)]">
-              Tell us about your team and we'll recommend the right
-              starting point — no pressure, no lock-in.
+              Tell us about your team and we'll recommend the right starting
+              point — no pressure, no lock-in.
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-
               <Link
                 to="/contact"
                 className="
@@ -93,12 +90,9 @@ const PricingCta = () => {
               >
                 Start Free Trial
               </Link>
-
             </div>
-
           </div>
         </motion.div>
-
       </div>
     </section>
   );

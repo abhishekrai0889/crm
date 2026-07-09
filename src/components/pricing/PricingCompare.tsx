@@ -1,6 +1,7 @@
+import { FC } from "react";
 import { motion } from "framer-motion";
 
-const compareData = [
+const compareData: string[][] = [
   ["Users included", "Per seat", "Per seat", "Per seat", "Custom"],
   ["Contacts", "Unlimited", "Unlimited", "Unlimited", "Unlimited"],
   ["Sales pipelines", "1", "Multiple", "Multiple", "Multiple"],
@@ -20,7 +21,7 @@ const compareData = [
   ["Support", "Email", "Priority email", "Live chat", "Named CSM"],
 ];
 
-const yesValues = [
+const yesValues: string[] = [
   "✓",
   "Unlimited",
   "Multiple",
@@ -28,11 +29,18 @@ const yesValues = [
   "Unlimited basic",
 ];
 
-const PricingCompare = () => {
+const headings: string[] = [
+  "Feature",
+  "Starter",
+  "Growth",
+  "Pro",
+  "Enterprise",
+];
+
+const PricingCompare: FC = () => {
   return (
     <section className="bg-[var(--bg)] py-20">
       <div className="mx-auto max-w-[1180px] px-6">
-
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -46,23 +54,13 @@ const PricingCompare = () => {
         </motion.div>
 
         <div className="overflow-x-auto rounded-xl border border-[var(--line)] bg-white">
-
           <table className="min-w-full border-collapse">
-
             <thead>
               <tr className="bg-[var(--bg)]">
-
-                {[
-                  "Feature",
-                  "Starter",
-                  "Growth",
-                  "Pro",
-                  "Enterprise",
-                ].map((heading) => (
+                {headings.map((heading) => (
                   <th
                     key={heading}
-                    className={`border-b border-[var(--line)] px-5 py-4 text-sm font-bold
-                    ${
+                    className={`border-b border-[var(--line)] px-5 py-4 text-sm font-bold ${
                       heading === "Feature"
                         ? "text-left text-[var(--ink-700)]"
                         : "text-center text-[var(--ink-900)]"
@@ -71,19 +69,16 @@ const PricingCompare = () => {
                     {heading}
                   </th>
                 ))}
-
               </tr>
             </thead>
 
             <tbody>
-
-              {compareData.map((row, index) => (
+              {compareData.map((row, rowIndex) => (
                 <tr
-                  key={index}
+                  key={rowIndex}
                   className="transition-colors hover:bg-slate-50"
                 >
                   {row.map((cell, cellIndex) => {
-
                     const isYes = yesValues.includes(cell);
                     const isNo = cell === "—";
 
@@ -91,18 +86,18 @@ const PricingCompare = () => {
                       <td
                         key={cellIndex}
                         className={`border-b border-[var(--line)] px-5 py-4 text-sm
-                        ${
-                          cellIndex === 0
-                            ? "text-left font-medium text-[var(--ink-700)]"
-                            : "text-center"
-                        }
-                        ${
-                          isYes
-                            ? "font-semibold text-green-600"
-                            : isNo
-                            ? "text-[var(--ink-300)]"
-                            : "text-[var(--ink-700)]"
-                        }`}
+                          ${
+                            cellIndex === 0
+                              ? "text-left font-medium text-[var(--ink-700)]"
+                              : "text-center"
+                          }
+                          ${
+                            isYes
+                              ? "font-semibold text-green-600"
+                              : isNo
+                              ? "text-[var(--ink-300)]"
+                              : "text-[var(--ink-700)]"
+                          }`}
                       >
                         {cell}
                       </td>
@@ -110,13 +105,9 @@ const PricingCompare = () => {
                   })}
                 </tr>
               ))}
-
             </tbody>
-
           </table>
-
         </div>
-
       </div>
     </section>
   );

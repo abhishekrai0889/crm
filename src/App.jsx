@@ -18,6 +18,9 @@ import Terms from "./components/policy/Terms";
 import Home from "./pages/Home";
 import Pricing from "./pages/Pricing";
 import Contact from "./pages/Contact";
+import ContactAdmin from "./pages/ContactAdmin";
+import ContactDetail from "./pages/ContactDetail";
+
 
 // Protected Pages
 import Dashboard from "./pages/Dashboard";
@@ -125,36 +128,44 @@ function App() {
           />
 
           {/* Public Routes - With Header/Footer (Redirect to dashboard if logged in) */}
-          <Route element={<AuthLayout hideLayout={hideLayout} />}>
-            <Route
-              path="/"
-              element={
-                <PublicRoute>
-                  <Home />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/pricing"
-              element={
-                <PublicRoute>
-                  <Pricing />
-                </PublicRoute>
-              }
-            />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+       <Route element={<AuthLayout hideLayout={hideLayout} />}>
+  <Route
+    path="/"
+    element={
+      <PublicRoute>
+        <Home />
+      </PublicRoute>
+    }
+  />
 
-            <Route path="/terms-of-service" element={<Terms />} />
-            <Route
-              path="/table"
-              element={
-                <PublicRoute>
-                  <BasicTable />
-                </PublicRoute>
-              }
-            />
-          </Route>
+  <Route
+    path="/pricing"
+    element={
+      <PublicRoute>
+        <Pricing />
+      </PublicRoute>
+    }
+  />
+
+  <Route path="/contact" element={<Contact />} />
+
+  {/* Contact Admin */}
+  <Route path="/contacts" element={<ContactAdmin />} />
+  <Route path="/contact-detail" element={<ContactDetail />} />
+
+  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+
+  <Route path="/terms-of-service" element={<Terms />} />
+
+  <Route
+    path="/table"
+    element={
+      <PublicRoute>
+        <BasicTable />
+      </PublicRoute>
+    }
+  />
+</Route>
 
           {/* Protected Routes - With Sidebar Layout */}
           <Route

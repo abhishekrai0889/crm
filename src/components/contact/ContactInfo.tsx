@@ -5,8 +5,18 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import FlashOnOutlinedIcon from "@mui/icons-material/FlashOnOutlined";
+import { SvgIconComponent } from "@mui/icons-material";
 
-const infoCards = [
+interface InfoCard {
+  icon: SvgIconComponent;
+  title: string;
+  description: string;
+  link?: string;
+  linkText?: string;
+  company?: string;
+}
+
+const infoCards: InfoCard[] = [
   {
     icon: EmailOutlinedIcon,
     title: "Sales enquiries",
@@ -36,7 +46,7 @@ const infoCards = [
   },
 ];
 
-const ContactInfo = () => {
+const ContactInfo: React.FC = () => {
   return (
     <aside className="space-y-4">
       {infoCards.map((item) => {
@@ -49,13 +59,11 @@ const ContactInfo = () => {
           >
             <div className="flex items-start gap-4">
               {/* Icon */}
-
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#EEF4FF] text-[var(--blue-600)]">
                 <Icon sx={{ fontSize: 22 }} />
               </div>
 
               {/* Content */}
-
               <div className="flex-1">
                 <h4 className="text-[16px] font-semibold leading-none text-[var(--ink-900)]">
                   {item.title}
@@ -70,7 +78,7 @@ const ContactInfo = () => {
                       {item.linkText}
                     </a>
 
-                    <p className=" text-[15px] leading-7 text-[var(--ink-500)]">
+                    <p className="text-[15px] leading-7 text-[var(--ink-500)]">
                       {item.description}
                     </p>
                   </>
@@ -80,7 +88,7 @@ const ContactInfo = () => {
                       {item.company}
                     </p>
 
-                    <p className=" text-[15px] leading-7 text-[var(--ink-500)]">
+                    <p className="text-[15px] leading-7 text-[var(--ink-500)]">
                       {item.description}
                     </p>
                   </>
@@ -92,7 +100,6 @@ const ContactInfo = () => {
       })}
 
       {/* CTA */}
-
       <div className="rounded-[18px] border border-[#C9DAFF] bg-[#EDF4FF] px-7 py-6">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-[var(--blue-600)] shadow-sm">

@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
-const faqs = [
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+const faqs: FAQ[] = [
   {
     question: "Do you charge more as my contact list grows?",
     answer:
@@ -35,21 +40,19 @@ const faqs = [
   },
 ];
 
-const PricingFaq = () => {
-  const [open, setOpen] = useState(0);
+const PricingFaq: FC = () => {
+  const [open, setOpen] = useState<number | null>(0);
 
   return (
     <section className="py-20">
       <div className="mx-auto max-w-[1180px] px-6">
-
         <div className="mb-14 text-center">
           <h2 className="text-[42px] font-bold tracking-[-0.02em] text-[var(--ink-900)]">
             Frequently asked questions
           </h2>
         </div>
 
-        <div className="mx-auto grid  gap-3">
-
+        <div className="mx-auto grid gap-3">
           {faqs.map((faq, index) => {
             const active = open === index;
 
@@ -64,10 +67,9 @@ const PricingFaq = () => {
                 }`}
               >
                 <button
-                  onClick={() =>
-                    setOpen(active ? null : index)
-                  }
-                className="flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left"
+                  type="button"
+                  onClick={() => setOpen(active ? null : index)}
+                  className="flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left"
                 >
                   <span className="text-[16px] font-semibold text-[var(--ink-900)]">
                     {faq.question}
@@ -113,7 +115,6 @@ const PricingFaq = () => {
               </motion.div>
             );
           })}
-
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 import AuthInfo from "../common/AuthInfo";
 
-export default function ForgotPasswordInfo() {
+const ForgotPasswordInfo: React.FC = () => {
   return (
     <AuthInfo
       badge="PASSWORD RECOVERY"
@@ -15,4 +15,6 @@ It happens to everyone.
       ]}
     />
   );
-}
+};
+
+export default ForgotPasswordInfo;
